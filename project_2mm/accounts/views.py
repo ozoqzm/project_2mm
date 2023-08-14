@@ -213,8 +213,14 @@ class GroupDetailView(APIView):
         
     def patch(self, request, code, format=None):
         try:
-            queryset = models.Group.objects.get(code=code)
-            serializer = serializers.GroupDetailSerializer(queryset, data=request.data, partial=True)
+            group = models.Group.objects.get(code=code)
+    
+            # Check if the user is not in the group
+            user_info, created = models.UserInfo.objects.get_or_create(user=request.user)
+            if not group.user.filter(user=user_info.user).exists():
+                group.user.add(user_info)  # Add the user to the group
+    
+            serializer = serializers.GroupDetailSerializer(group, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -222,8 +228,36 @@ class GroupDetailView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except models.Group.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        except models.UserInfo.DoesNotExist:
+            return Response("User not found", status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # try:
+        #     queryset = models.Group.objects.get(code=code)
+        #     serializer = serializers.GroupDetailSerializer(queryset, data=request.data, partial=True)
+        #     if serializer.is_valid():
+        #         serializer.save()
+        #         return Response(serializer.data)
+        #     else:
+        #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # except models.Group.DoesNotExist:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+        # except Exception as e:
+        #     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, code, format=None):
         group = self.get_object(code)
@@ -231,9 +265,3 @@ class GroupDetailView(APIView):
             return Response({'실패': '해당 모임 없음'},status=status.HTTP_404_NOT_FOUND)
         group.delete()
         return Response({'성공': '삭제완료'}, status=status.HTTP_204_NO_CONTENT)
-
-# 화상 공유시 url 발급 
-class CurrentPageURL(APIView):
-    def get(self, request):
-        current_url = request.build_absolute_uri()
-        return Response({'current_url': current_url})
