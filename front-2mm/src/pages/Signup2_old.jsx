@@ -178,17 +178,17 @@ const Signup2_old = () => {
   // 저장 버튼 누를 시 사용자가 모임에 추가 되어야함
   const onSubmit = async () => {
     try {
-      const token = localStorage.getItem("token");
+      //const token = localStorage.getItem("token");
 
       const response = await axios.patch(
-        `http://127.0.0.1:8000/group/${invitecode}/`,
+        `http://127.0.0.1:8000/group/${invitecode}/`
         //수정할 데이터 여기에 쓰기,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        // {
+        //   headers: {
+        //     Authorization: `Token ${token}`,
+        //     "Content-Type": "multipart/form-data",
+        //   },
+        // }
       );
       console.log("Data:", response.data);
 

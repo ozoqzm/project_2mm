@@ -116,7 +116,10 @@ const Signup5_new = () => {
         />
         <ImageUpload>
           {group && group.profile ? (
-            <img src={group.profile} alt="ImageUpload" />
+            <img
+              style={{ width: "320px", height: "242px", objectFit: "cover" }}
+              src={`http://127.0.0.1:8000${group.profile}`}
+            />
           ) : null}
         </ImageUpload>
         {group ? <GroupName>{group.name}</GroupName> : null}
