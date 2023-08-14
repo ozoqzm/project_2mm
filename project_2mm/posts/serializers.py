@@ -31,7 +31,7 @@ class GroupPostSerializer(ModelSerializer):
     liked = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Post
-        fields = ['id', 'writer','content', 'image','liked']
+        fields = ['id', 'writer','content','created_at', 'image','liked']
 
 class GroupPlanSerializer(ModelSerializer) :
     class Meta :
