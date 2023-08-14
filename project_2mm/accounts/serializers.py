@@ -52,7 +52,7 @@ class GroupCreateSerializer(serializers.ModelSerializer):
         fields = ['name', 'code']  # 코드 필드도 포함
 
 class GroupSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username')
+    username = serializers.ReadOnlyField(source='user.username') 
     class Meta:
         model = models.Group
         fields = ['name', 'info', 'profile', 'username', 'code']
@@ -63,19 +63,13 @@ class GroupSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 class UserInfoSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = models.UserInfo
-        fields = ['user', 'profile']
-
-
-class MypageSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = models.UserInfo
-        fields = ['profile', 'phone']
+        fields = ['id', 'username', 'profile']
 
 class GroupDetailSerializer(serializers.ModelSerializer):
-    user = UserInfoSerializer(many=True, source='user.all')  # Many-to-Many 관계에서 사용자 정보를 가져옵니다.
-
+    user = UserInfoSerializer(many=True, source='user.all')
     class Meta:
         model = models.Group
         fields = '__all__'
