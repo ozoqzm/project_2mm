@@ -75,6 +75,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': '2103c1e9e9ec3c9736da56b28c6bbe14',
             'secret': 954168,
+            'callback_url': '',
             'key': ''
         }
     }
@@ -146,6 +147,11 @@ TEMPLATES = [
         },
     },
 ]
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+# LOGIN_REDIRECT_URL = 'main'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'index'
+ACCOUNT_LOGOUT_ON_GET = True 
 
 WSGI_APPLICATION = 'project_2mm.wsgi.application'
 
