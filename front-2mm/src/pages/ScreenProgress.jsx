@@ -20,10 +20,14 @@ const Container = styled.div`
     padding-right: 1rem;
   }
 `;
+
 const Back = styled.div`
   position: relative;
-  margin-top: 17px;
-  margin-left: 15px;
+  top: 17px;
+  left: -160.5px;
+  // background: none;
+  // border: none;
+  // cursor: pointer;
 `;
 
 const ButtonContainer = styled.div`
@@ -34,7 +38,10 @@ const ButtonContainer = styled.div`
   gap: 20px;
 `;
 
-const StartBtn = styled.button`
+// 수정된 부분: started 프롭을 필터링하여 문자열로 변환하여 전달
+const StartBtn = styled.button.attrs((props) => ({
+  started: props.$started.toString(), // started 프롭을 문자열로 변환하여 전달
+}))`
   position: relative;
   display: flex;
   width: 154px;
@@ -44,9 +51,7 @@ const StartBtn = styled.button`
   align-items: center;
   border-radius: 10px;
   background: ${({ started }) =>
-    started
-      ? "#d6d6d6"
-      : "linear-gradient(180deg, #388afc 0%, #4552e5 100%)"}; /*started 상태에 따라 배경색 변경 */
+    started ? "#d6d6d6" : "linear-gradient(180deg, #388afc 0%, #4552e5 100%)"};
   color: ${({ started }) => (started ? "#3D3D3D" : "#fff")};
   font-family: SUIT;
   font-size: 20px;
@@ -56,7 +61,10 @@ const StartBtn = styled.button`
   border: none;
 `;
 
-const StopBtn = styled.button`
+// 수정된 부분: started 프롭을 필터링하여 문자열로 변환하여 전달
+const StopBtn = styled.button.attrs((props) => ({
+  started: props.$started.toString(), // started 프롭을 문자열로 변환하여 전달
+}))`
   position: relative;
   display: flex;
   width: 154px;
@@ -66,11 +74,8 @@ const StopBtn = styled.button`
   align-items: center;
   border-radius: 10px;
   background: ${({ started }) =>
-    started
-      ? "linear-gradient(180deg, #388afc 0%, #4552e5 100%)"
-      : "#d6d6d6"}; /* started 상태에 따라 배경색 변경 */
-  color: ${({ started }) =>
-    started ? "#fff" : "#3d3d3d"}; /*started 상태에 따라 글자색 변경 */
+    started ? "linear-gradient(180deg, #388afc 0%, #4552e5 100%)" : "#d6d6d6"};
+  color: ${({ started }) => (started ? "#fff" : "#3d3d3d")};
   font-family: SUIT;
   font-size: 20px;
   font-style: normal;
@@ -83,6 +88,7 @@ const ScreenProgress = () => {
   const navigate = useNavigate();
 
   const gotoBack = () => {
+    console.log("백버튼 클릭");
     navigate("/Screenshare");
   };
   const videoElem = useRef(null);
@@ -111,7 +117,7 @@ const ScreenProgress = () => {
         videoElem.current.play();
       };
       setDisplayMediaStream(stream);
-      setStarted(true); /*화면 공유 시작 상태 설정 */
+      setStarted(true); // 화면 공유 시작 상태 설정
     } catch (err) {
       if (err.name === "NotAllowedError") {
         console.error("User denied permission");
@@ -128,7 +134,7 @@ const ScreenProgress = () => {
       videoElem.current.srcObject = null;
       setDisplayMediaStream(null);
       dumpOptionsInfo();
-      setStarted(false); /*화면 공유 종료 상태 설정 */
+      setStarted(false); // 화면 공유 종료 상태 설정
     }
   };
 
@@ -144,20 +150,20 @@ const ScreenProgress = () => {
 
   return (
     <Container>
-      <Back onClick={gotoBack}>
+      <Back onClick={() => navigate("/Screenshare")}>
         <img src={`${process.env.PUBLIC_URL}/images/backbtn.svg`} />
       </Back>
       <video ref={videoElem} autoPlay width="375px" height="740px"></video>
       <br />
       <ButtonContainer>
-        <StartBtn onClick={startCapture} started={started}>
+        {/* 수정된 부분: started 프롭 전달 */}
+        <StartBtn onClick={startCapture} $started={started}>
           시작하기
         </StartBtn>{" "}
-        {/*started 상태 전달 */}
-        <StopBtn onClick={stopCapture} started={started}>
+        {/* 수정된 부분: started 프롭 전달 */}
+        <StopBtn onClick={stopCapture} $started={started}>
           종료하기
         </StopBtn>{" "}
-        {/*started 상태 전달 */}
       </ButtonContainer>
       <br />
       <pre ref={logElem}></pre>

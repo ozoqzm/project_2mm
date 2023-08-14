@@ -87,6 +87,8 @@ const Screenshare = () => {
     navigate("/GroupHome");
   };
 
+  // copyBox에 뜰 url 가져오는 api추가 필요!!!
+
   const handleCopyClick = () => {
     if (copyBoxRef.current) {
       const range = document.createRange();

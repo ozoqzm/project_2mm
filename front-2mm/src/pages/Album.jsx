@@ -37,7 +37,6 @@ const PicZone = styled.div`
   max-width: 360px;
   height: 650px;
   margin: auto;
-  background: pink;
   overflow-y: scroll;
   overflow-x: hidden;
   &::-webkit-scrollbar {

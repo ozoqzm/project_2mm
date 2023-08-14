@@ -80,11 +80,30 @@ const AlbumDetail = () => {
       });
   }, []);
 
+  // 다운로드
   const onSubmit = () => {
     axios
-      .get(`http://127.0.0.1:8000/group/${code}/album/${postID}/download/`)
-      .then((response) => {
-        setDown(response.data);
+      .get(`http://127.0.0.1:8000/group/${code}/album/${postID}/download/`, {
+        responseType: "blob", // 응답 데이터 Blob 형식으로 설정(지우지마세요)
+      })
+      .then((res) => {
+        // 서버로부터 응답으로 받은 데이터를 Blob 형식으로 다운로드
+        const url = window.URL.createObjectURL(res.data);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "저장해봄"; // 파일명 설정
+        document.body.appendChild(a);
+        a.click(); // 링크를 클릭하여 다운로드를 시작
+
+        // 일정 시간 후에 URL을 해제해 메모리 관리
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 60000);
+
+        a.remove(); // 생성한 링크 엘리먼트를 제거
+      })
+      .catch((err) => {
+        console.error("에러 발생: ", err);
       });
   };
 
@@ -97,13 +116,13 @@ const AlbumDetail = () => {
         <img src={`${process.env.PUBLIC_URL}/images/albumtitle.svg`} />
       </Title>
       <BoxZone>
-        {/* 불러온 이미지 넣어줘야 함 */}
         <Box>
-          {/* <div>{post && post.createdAt}</div> */}
-          <img
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            src={`http://127.0.0.1:8000${post.image}`}
-          />
+          {post && post.image && (
+            <img
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              src={`http://127.0.0.1:8000${post.image}`}
+            />
+          )}
         </Box>
         {/* 다운로드 버튼 누르면 다운로드 정보 post로 넘겨줘야 함 */}
         <DownloadBtn onClick={onSubmit}>
