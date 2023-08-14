@@ -67,6 +67,36 @@ class LogoutView(APIView):
             print("현재 로그인되어 있지 않습니다.")
         return Response({'message': '로그아웃'}, status=status.HTTP_200_OK)
 
+#카카오로그인 
+class KakaoLoginView(APIView):
+    def post(self, request, *args, **kwargs):
+        kakao_token = request.data.get('kakaoToken')
+        if kakao_token:
+            # 카카오톡 토큰 검증
+            response = requests.get(f'https://kapi.kakao.com/v2/user/me', headers={
+            'Authorization': f'Bearer {kakao_token}'
+            })
+
+            if response.status_code == 200:
+                user_info = response.json()
+                kakao_id = user_info['id']
+
+                # SocialAccount를 통해 User 객체 가져오기
+                try:
+                    social_account = SocialAccount.objects.get(provider='kakao', uid=kakao_id)
+                    user = social_account.user
+                except SocialAccount.DoesNotExist:
+                    return Response({'message': '소셜 계정 연결 실패'}, status=status.HTTP_400_BAD_REQUEST)
+
+                # UserInfo 모델에 추가 정보 저장 또는 업데이트
+                nickname = user_info.get('kakao_account', {}).get('profile', {}).get('nickname')
+            
+                userinfo, _ = UserInfo.objects.get_or_create(user=user)
+                userinfo.nickname = nickname
+                userinfo.save()
+                return Response({'message': '로그인 성공'}, status=status.HTTP_200_OK)
+            
+        return Response({'message': '로그인 실패'}, status=status.HTTP_400_BAD_REQUEST)
 #회원가입
 class SingupView(APIView):
     # def get(self, request):
