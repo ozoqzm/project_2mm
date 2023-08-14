@@ -201,11 +201,11 @@ const GroupDetail = () => {
   const onSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      const headers = { Authorization: `Token ${token}` };
+      // const headers = { Authorization: `Token ${token}` };
       //const code = localStorage.getItem("code"); // 이전 페이지에서 전달된 그룹코드
       // 이전 페이지에서 전달받은 코드를 불러와야 함. 그래야 클릭한 모임이 삭제됨 로컬스토리지에서 불러오지x
       axios
-        .delete(`http://127.0.0.1:8000/group/${code}/`, { headers })
+        .delete(`http://127.0.0.1:8000/group/${code}/`)
         .then((res) => {
           console.log(res);
           setGroup(group.filter((e) => group.code !== e.code)); // texts 배열 업데이트해서 해당 text.id와 일치하지 않는 데이터만 남도록 필터링

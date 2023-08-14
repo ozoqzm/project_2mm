@@ -140,9 +140,6 @@ const Home = () => {
         {postList.map((e) => (
           <GroupItem code={e.code} />
         ))}
-        {/* <GroupItem></GroupItem>
-        <GroupItem></GroupItem>
-        <GroupItem></GroupItem> */}
         <AddBox onClick={gotoAdd}>
           <img
             style={{ margin: "40px" }}

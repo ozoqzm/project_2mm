@@ -58,11 +58,11 @@ const PicBox = styled.div`
 `;
 
 // 앨범 하나하나 컴포넌트
-const AlbumItem = ({ postID }) => {
+const AlbumItem = ({ postID, postImage }) => {
   const navigate = useNavigate();
 
   const goAlbumDetail = () => {
-    navigate(`/AlbumDetail`); // user_id, post_id read에 전달. 원래는 뒤에 ${postID}
+    navigate(`/AlbumDetail`, { state: { postID } }); // user_id, post_id read에 전달. 원래는 뒤에 ${postID}
   };
   return (
     <>
@@ -75,7 +75,7 @@ const AlbumItem = ({ postID }) => {
             borderRadius: "6px",
             objectFit: "cover",
           }}
-          src={`${process.env.PUBLIC_URL}/images/familypic.svg`}
+          src={`http://127.0.0.1:8000${postImage}`}
         />
       </PicBox>
     </>
@@ -90,13 +90,16 @@ const Album = () => {
 
   const [postList, setPostList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const code = localStorage.getItem("code");
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         // API 호출
-        const response = await axios.get(`group/<uuid:group_code>/album/`);
+        const response = await axios.get(
+          `http://127.0.0.1:8000group/${code}/album/`
+        );
         setPostList(response.data); // API 응답으로 받은 데이터를 state에 저장
         // user_id 로그인하고 전달받기
       } catch (error) {
@@ -120,21 +123,14 @@ const Album = () => {
         <img src={`${process.env.PUBLIC_URL}/images/albumtitle.svg`} />
       </Title>
       <PicZone>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        {/* {postList.map((e) => (
-          <AlbumItem>
-            <img
+        {postList.map((e) => (
+          <AlbumItem postID={e.id} postImage={e.image}>
+            {/* <img
               src={post && post.image}
-              style={{ display: "block", width: "170px", height: "170px"" }}
-            /> // 반복문으로 돌려서 배열 안에 저장된 객체들의 이미지들 출력
+              style={{ display: "block", width: "170px", height: "170px" }}
+            /> */}
           </AlbumItem>
-        ))} */}
+        ))}
       </PicZone>
     </Container>
   );
