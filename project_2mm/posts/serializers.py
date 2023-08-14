@@ -1,15 +1,10 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from .models import Post, Comment, UserInfo, Plan
-from . import models
-
-class UserInfoSerializer(ModelSerializer):
-    class Meta: 
-        model= UserInfo
-        fiels='__all__'
+from accounts.serializers import UserInfoSerializer
+from .models import Post, Comment, Plan
 
 class PostSerializer(ModelSerializer):
-    writer = serializers.SerializerMethodField() #작성자
+    writer = UserInfoSerializer(many=True, source='user.all')
     class Meta:
         model = Post
         fields = '__all__'

@@ -1,22 +1,19 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet, ViewSet
-from rest_framework import viewsets, generics
+from rest_framework import generics
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from django.shortcuts import get_object_or_404
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login , logout
-from allauth.socialaccount.models import SocialAccount
-from .serializers import UsernameSerializer
+from django.shortcuts import redirect
+
 from . import serializers
-from phonenumber_field.modelfields import PhoneNumber
-from posts.models import UserInfo
 from posts import models
-from rest_framework.decorators import action
-from rest_framework.decorators import api_view
+#from phonenumber_field.modelfields import PhoneNumber
 import uuid
-import requests 
+import requests
 
 User = get_user_model()
 
@@ -26,7 +23,7 @@ class Loginview(APIView):
         phone = request.data.get('phone')
         password = request.data.get('password')
         try:
-            user_info = UserInfo.objects.get(phone=phone)
+            user_info = models.UserInfo.objects.get(phone=phone)
             print(phone)
             user = authenticate(request, username=user_info.user, password=password)
 
@@ -44,13 +41,20 @@ class Loginview(APIView):
 
                 return Response({ 'token': token.key}, status=status.HTTP_200_OK)
             else:
-                print(user)
-                print('뭐1')
                 return Response({'error': '로그인실패! 다시 시도'}, status=status.HTTP_401_UNAUTHORIZED)
-        except UserInfo.DoesNotExist:
+        except models.UserInfo.DoesNotExist:
             print('뭐2')
             return Response({'error': 'userinfo가 비어있음!'}, status=status.HTTP_404_NOT_FOUND)
 
+class KakaoSignInView(APIView) :
+    def get(self, request) :
+        app_key = '2103c1e9e9ec3c9736da56b28c6bbe14'
+        redirect_uri = 'http://127.0.0.1:8000/authaccounts/kakao/login/callback/'
+        kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
+        return redirect(
+            f'{kakao_auth_api}&client_id={app_key}&redirect_uri={redirect_uri}'
+        )
+#https://accounts.kakao.com/login/
 #로그아웃 
 class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
@@ -71,7 +75,7 @@ class KakaoLoginView(APIView):
             # 카카오톡 토큰 검증
             response = requests.get(f'https://kapi.kakao.com/v2/user/me', headers={
             'Authorization': f'Bearer {kakao_token}'
-             })
+            })
 
             if response.status_code == 200:
                 user_info = response.json()
@@ -102,12 +106,12 @@ class SingupView(APIView):
 
     def post(self, request):
         # 여기서 받은 사용자 이름으로 일단 create user 하고 나머지 정보는 patch로 수정하는 식으로 
-        serializer = UsernameSerializer(data=request.data)
+        serializer = serializers.UsernameSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data.get('username')
             #self.request.session['username'] = username
             user = User.objects.create_user(username=username)
-            user_info = UserInfo.objects.create(user=user)
+            user_info = models.UserInfo.objects.create(user=user)
             if user is not None :
                 print("유저 생성됐다")
             if user_info is not None :
@@ -121,7 +125,7 @@ class SingupView(APIView):
 
     def patch(self, request, format=None):
         try:
-            user_info = UserInfo.objects.get(user=request.user)
+            user_info = models.UserInfo.objects.get(user=request.user)
             print('입력받은 데이터는 ')
             print(request.data)
 
@@ -134,7 +138,7 @@ class SingupView(APIView):
                 return Response(serializer.data)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except UserInfo.DoesNotExist:
+        except models.UserInfo.DoesNotExist:
             return Response({'detail': 'User info not found.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -152,21 +156,21 @@ class PasswordView(APIView):
 
 class MypageView(APIView) :
     def get(self, request):
-        user_info = UserInfo.objects.get(user=request.user)
-        serializer = serializers.MypageSerializer(user_info)  # many=True 옵션 제거
+        user_info = models.UserInfo.objects.get(user=request.user)
+        serializer = serializers.UserInfoSerializer(user_info)
         return Response(serializer.data)
 
     def patch(self, request, format=None):
         try:
-            user_info = UserInfo.objects.get(user=request.user)
-            serializer = serializers.MypageSerializer(user_info, data=request.data, partial=True)
+            user_info = models.UserInfo.objects.get(user=request.user)
+            serializer = serializers.UserInfoSerializer(user_info, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.update(user_info, serializer.validated_data)
                 serializer.save() 
                 return Response(serializer.data)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except UserInfo.DoesNotExist:
+        except models.UserInfo.DoesNotExist:
             return Response({'detail': 'User info not found.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
