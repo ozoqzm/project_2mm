@@ -172,7 +172,7 @@ const GroupDetail = () => {
   const location = useLocation();
 
   // 이전 페이지에서 전달된 초대코드
-  const code = location.state;
+  const { code } = location.state; // code 무조건 {}로 묶어야함!!
   console.log(code);
 
   useEffect(() => {
@@ -200,7 +200,7 @@ const GroupDetail = () => {
   // 모임삭제하기 기능 추가
   const onSubmit = async () => {
     try {
-      const token = localStorage.getItem("token");
+      //const token = localStorage.getItem("token");
       // const headers = { Authorization: `Token ${token}` };
       //const code = localStorage.getItem("code"); // 이전 페이지에서 전달된 그룹코드
       // 이전 페이지에서 전달받은 코드를 불러와야 함. 그래야 클릭한 모임이 삭제됨 로컬스토리지에서 불러오지x
@@ -224,30 +224,32 @@ const GroupDetail = () => {
     <Container>
       <StickyBox>
         <GroupImage>
-          <img
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "0px 0px 17.76px 17.76px",
-              filter: "brightness(60%)",
-            }}
-            src={`http://127.0.0.1:8000${group.profile}`}
-          />
-          <GroupTitle>{group.name}</GroupTitle>
+          {group && group.profile && (
+            <img
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "0px 0px 17.76px 17.76px",
+                filter: "brightness(60%)",
+              }}
+              src={`http://127.0.0.1:8000${group.profile}`}
+            />
+          )}
+          <GroupTitle>{group && group.name}</GroupTitle>
         </GroupImage>
       </StickyBox>
       <BoxZone>
         {/* 사용자 목록 출력 반복문으로 */}
         {users.map((userObj) => (
-          <Box key={userObj.user}>
+          <Box key={userObj.id}>
             <ProfileImg>
               <img
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 src={`http://127.0.0.1:8000${userObj.profile}`}
               />
             </ProfileImg>
-            <NameText>{userObj.user}</NameText>
+            <NameText>{userObj.username}</NameText>
           </Box>
         ))}
         <Box onClick={gotoAddMember}>
