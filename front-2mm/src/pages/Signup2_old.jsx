@@ -157,7 +157,6 @@ const Signup2_old = () => {
     const fetchData = async () => {
       setPostLoading(true);
       try {
-        // API 호출
         const response = await axios.get(
           `http://127.0.0.1:8000/group/${invitecode}/`
         );
@@ -168,34 +167,39 @@ const Signup2_old = () => {
       }
       setPostLoading(false); // 로딩 상태 변경
     };
-    fetchData(); // fetchData 함수 호출 (데이터를 서버에서 가져옴)
+    fetchData(); // (데이터를 서버에서 가져오는 함수)
   }, [invitecode]); // invitecode가 변경될 때마다 데이터를 다시 불러오도록
 
   if (postLoading) {
     return <div>대기중...</div>;
   }
 
+  // 다시 보기!!!
   // 저장 버튼 누를 시 사용자가 모임에 추가 되어야함
-  const onSubmit = async () => {
-    try {
-      //const token = localStorage.getItem("token");
+  // const onSubmit = async () => {
+  //   try {
+  //     //const token = localStorage.getItem("token");
 
-      const response = await axios.patch(
-        `http://127.0.0.1:8000/group/${invitecode}/`
-        //수정할 데이터 여기에 쓰기,
-        // {
-        //   headers: {
-        //     Authorization: `Token ${token}`,
-        //     "Content-Type": "multipart/form-data",
-        //   },
-        // }
-      );
-      console.log("Data:", response.data);
+  //     const response = await axios.patch(
+  //       `http://127.0.0.1:8000/group/${invitecode}/`
+  //     );
+  //     console.log("Data:", response.data);
 
-      navigate("/signup3_old");
-    } catch (error) {
-      console.error("Error creating new post:", error);
-    }
+  //     navigate("/signup3_old");
+  //   } catch (error) {
+  //     console.error("Error creating new post:", error);
+  //   }
+  // };
+
+  const onSubmit = () => {
+    axios
+      .patch(`http://127.0.0.1:8000/group/${invitecode}/`)
+      .then((response) => {
+        console.log("Data updated:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating data:", error);
+      });
   };
   return (
     <Container>
@@ -225,14 +229,14 @@ const Signup2_old = () => {
         <BoxZone>
           {/* 사용자 목록 출력 */}
           {users.map((userObj) => (
-            <Box key={userObj.user}>
+            <Box key={userObj.id}>
               <ProfileImg>
                 <img
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   src={`http://127.0.0.1:8000${userObj.profile}`}
                 />
               </ProfileImg>
-              <NameText>{userObj.user}</NameText>
+              <NameText>{userObj.username}</NameText>
             </Box>
           ))}
         </BoxZone>

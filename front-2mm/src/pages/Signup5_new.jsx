@@ -54,7 +54,7 @@ const GroupName = styled.div`
   width: 127px;
   height: 22px;
   left: 41px;
-  top: 424px;
+  top: -250px;
 
   font-family: "Inter";
   font-style: normal;

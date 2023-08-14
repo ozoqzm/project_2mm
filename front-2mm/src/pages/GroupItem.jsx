@@ -49,6 +49,7 @@ const GroupItem = ({ code }) => {
   const navigate = useNavigate();
 
   const goGroupHome = () => {
+    localStorage.setItem("code", code); // 해당 그룹으로 이동 시 코드 설정!!
     navigate(`/GroupHome`, { state: { code } }); // user_id, post_id read에 전달. 원래는 뒤에 ${postID}
   };
   const goGroupDetail = () => {

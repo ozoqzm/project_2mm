@@ -68,7 +68,7 @@ function App() {
           <Route path="/Date_Detail" element={<Date_Detail />} />{" "}
           <Route path="/Date_Plus" element={<Date_Plus />} />{" "}
           <Route path="/Date_Write" element={<Date_Write />} />{" "}
-          <Route path="/AlbumDetail" element={<AlbumDetail />} />{" "}
+          <Route path="/AlbumDetail/:postID" element={<AlbumDetail />} />{" "}
         </Routes>
       </div>
     </BrowserRouter>

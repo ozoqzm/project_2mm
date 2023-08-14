@@ -62,7 +62,7 @@ const AlbumItem = ({ postID, postImage }) => {
   const navigate = useNavigate();
 
   const goAlbumDetail = () => {
-    navigate(`/AlbumDetail`, { state: { postID } }); // user_id, post_id read에 전달. 원래는 뒤에 ${postID}
+    navigate(`/AlbumDetail/${postID}`);
   };
   return (
     <>
@@ -98,7 +98,7 @@ const Album = () => {
       try {
         // API 호출
         const response = await axios.get(
-          `http://127.0.0.1:8000group/${code}/album/`
+          `http://127.0.0.1:8000/group/${code}/album/`
         );
         setPostList(response.data); // API 응답으로 받은 데이터를 state에 저장
         // user_id 로그인하고 전달받기
@@ -124,7 +124,7 @@ const Album = () => {
       </Title>
       <PicZone>
         {postList.map((e) => (
-          <AlbumItem postID={e.id} postImage={e.image}>
+          <AlbumItem key={e.id} postID={e.id} postImage={e.image}>
             {/* <img
               src={post && post.image}
               style={{ display: "block", width: "170px", height: "170px" }}

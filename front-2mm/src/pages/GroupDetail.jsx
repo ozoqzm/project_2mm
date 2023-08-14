@@ -172,7 +172,7 @@ const GroupDetail = () => {
   const location = useLocation();
 
   // 이전 페이지에서 전달된 초대코드
-  const { code } = location.state;
+  const code = location.state;
   console.log(code);
 
   useEffect(() => {
