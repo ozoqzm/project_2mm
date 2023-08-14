@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -131,19 +134,24 @@ const DeleteBtn = styled.button`
 `;
 
 // 가족 구성원 컴포넌트
-const FamilyBox = () => {
-  return (
-    <Box>
-      <ProfileImg>
-        <img
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          src={`${process.env.PUBLIC_URL}/images/familypic.svg`}
-        />
-      </ProfileImg>
-      <NameText>박소정</NameText>
-    </Box>
-  );
-};
+// const FamilyBox = () => {
+//   return (
+//     <>
+//       {/* 사용자 목록 출력 반복문으로 */}
+//       {users.map((userObj) => (
+//         <Box key={userObj.user}>
+//           <ProfileImg>
+//             <img
+//               style={{ width: "100%", height: "100%", objectFit: "cover" }}
+//               src={`http://127.0.0.1:8000${userObj.profile}`}
+//             />
+//           </ProfileImg>
+//           <NameText>{userObj.user}</NameText>
+//         </Box>
+//       ))}
+//     </>
+//   );
+// };
 
 const GroupDetail = () => {
   // 이 페이지에서 수정 삭제 구현해야 함
@@ -155,6 +163,63 @@ const GroupDetail = () => {
     navigate("/Signup4_new");
   };
 
+  // 그룹 상세 정보 불러오기 추가
+  const [group, setGroup] = useState(null);
+  const [users, setUsers] = useState([]); // 추가
+  const [postLoading, setPostLoading] = useState(true);
+
+  // 전에 페이지에서 그룹 코드 받아오기
+  const location = useLocation();
+
+  // 이전 페이지에서 전달된 초대코드
+  const { code } = location.state;
+  console.log(code);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPostLoading(true);
+      try {
+        // API 호출
+        const response = await axios.get(
+          `http://127.0.0.1:8000/group/${code}/`
+        );
+        setGroup(response.data);
+        setUsers(response.data.user); // users배열에 저장 추가
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setPostLoading(false); // 로딩 상태 변경
+    };
+    fetchData(); // fetchData 함수 호출 (데이터를 서버에서 가져옴)
+  }, []); // invitecode가 변경될 때마다 데이터를 다시 불러오도록
+
+  if (postLoading) {
+    return <div>대기중...</div>;
+  }
+
+  // 모임삭제하기 기능 추가
+  const onSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Token ${token}` };
+      //const code = localStorage.getItem("code"); // 이전 페이지에서 전달된 그룹코드
+      // 이전 페이지에서 전달받은 코드를 불러와야 함. 그래야 클릭한 모임이 삭제됨 로컬스토리지에서 불러오지x
+      axios
+        .delete(`http://127.0.0.1:8000/group/${code}/`, { headers })
+        .then((res) => {
+          console.log(res);
+          setGroup(group.filter((e) => group.code !== e.code)); // texts 배열 업데이트해서 해당 text.id와 일치하지 않는 데이터만 남도록 필터링
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      navigate("/Home"); // t삭제버튼 누르면 홈으로
+    } catch (error) {
+      console.error("Error delete:", error);
+    }
+  };
+
   return (
     <Container>
       <StickyBox>
@@ -164,21 +229,27 @@ const GroupDetail = () => {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              "border-radius": "0px 0px 17.76px 17.76px",
+              borderRadius: "0px 0px 17.76px 17.76px",
               filter: "brightness(60%)",
             }}
-            src={`${process.env.PUBLIC_URL}/images/exPic.png`}
+            src={`http://127.0.0.1:8000${group.profile}`}
           />
-          <GroupTitle>화목한 우리 가족</GroupTitle>
+          <GroupTitle>{group.name}</GroupTitle>
         </GroupImage>
       </StickyBox>
       <BoxZone>
-        <FamilyBox></FamilyBox>
-        <FamilyBox></FamilyBox>
-        <FamilyBox></FamilyBox>
-        <FamilyBox></FamilyBox>
-        <FamilyBox></FamilyBox>
-        <FamilyBox></FamilyBox>
+        {/* 사용자 목록 출력 반복문으로 */}
+        {users.map((userObj) => (
+          <Box key={userObj.user}>
+            <ProfileImg>
+              <img
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                src={`http://127.0.0.1:8000${userObj.profile}`}
+              />
+            </ProfileImg>
+            <NameText>{userObj.user}</NameText>
+          </Box>
+        ))}
         <Box onClick={gotoAddMember}>
           <ProfileImg>
             <img
@@ -189,7 +260,7 @@ const GroupDetail = () => {
           <AddText onClick={gotoAddMember}>멤버 추가하기</AddText>
         </Box>
       </BoxZone>
-      <DeleteBtn>모임 삭제하기</DeleteBtn>
+      <DeleteBtn onClick={onSubmit}>모임 삭제하기</DeleteBtn>
     </Container>
   );
 };

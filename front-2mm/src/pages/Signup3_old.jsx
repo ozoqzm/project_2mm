@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -76,12 +77,51 @@ const Signup3_old = () => {
     navigate("/Home");
   };
 
+  // 사진 업로드
+  // 헤더에 토큰 전달
+
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0]; // 선택한 이미지 파일 가져오기
-    setSelectedImage(file); // 선택한 이미지 상태 업데이트
+  const onSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const code = localStorage.getItem("code");
+
+      const formData = new FormData();
+      if (selectedImage) {
+        formData.append("profile", selectedImage); // 이미지 파일을 FormData에 추가
+      }
+      const response = await axios.patch(
+        `http://127.0.0.1:8000/mypage/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Data:", response.data);
+
+      navigate("/Home");
+    } catch (error) {
+      console.error("Error creating new post:", error);
+    }
   };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
+  };
+
+  // 구분
+  // const [selectedImage, setSelectedImage] = useState(null);
+
+  // const handleImageUpload = (e) => {
+  //   const file = e.target.files[0]; // 선택한 이미지 파일 가져오기
+  //   setSelectedImage(file); // 선택한 이미지 상태 업데이트
+  // };
 
   return (
     <Container>
@@ -114,8 +154,7 @@ const Signup3_old = () => {
           style={{ display: "none" }}
         ></input>
       </ImageUpload>
-      <NextBtn onClick={handleNextClick}>
-        {/* Call handleNextClick */}
+      <NextBtn onClick={onSubmit}>
         <img src={`${process.env.PUBLIC_URL}/images/startbtn.svg`} />
       </NextBtn>
     </Container>

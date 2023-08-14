@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 import GroupItem from "./GroupItem";
 
 const Container = styled.div`
@@ -106,6 +107,16 @@ const BtnExplain = styled.div`
 `;
 
 const GroupHome = () => {
+  // 전에 페이지에서 그룹 코드 받아오기
+  const location = useLocation();
+
+  // 이전 페이지에서 전달된 초대코드
+  const { code } = location.state;
+  console.log(code);
+
+  // 게시판, 앨범 등의 구별을 위해 계속 쓸 듯.. 로컬스토리지에 저장해두겠음
+  localStorage.setItem("code", code);
+
   const navigate = useNavigate();
 
   // 이동 링크 뒤에.. userId같은 거 넘겨줘야하나

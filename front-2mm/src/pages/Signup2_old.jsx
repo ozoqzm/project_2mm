@@ -5,6 +5,9 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 
+// 변경사항 수정되나?
+//abcde;
+
 const Container = styled.div`
   position: relative;
   margin: 30px 0;
@@ -172,15 +175,28 @@ const Signup2_old = () => {
     return <div>대기중...</div>;
   }
 
-  // // 화면 로드할 때 불러와지게
-  // useEffect(() => {
-  //   axios.get(`http://127.0.0.1:8000/group/${invitecode}/`).then((response) => {
-  //     setGroup(response.data);
-  //     setUsers(response.data.user); // users배열에 저장 추가
-  //     setPostLoading(false);
-  //   });
-  // }, []);
+  // 저장 버튼 누를 시 사용자가 모임에 추가 되어야함
+  const onSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
+      const response = await axios.patch(
+        `http://127.0.0.1:8000/group/${invitecode}/`,
+        //수정할 데이터 여기에 쓰기,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Data:", response.data);
+
+      navigate("/signup3_old");
+    } catch (error) {
+      console.error("Error creating new post:", error);
+    }
+  };
   return (
     <Container>
       <Back>
@@ -199,7 +215,10 @@ const Signup2_old = () => {
         />
         {/* 여기에 모임 이미지 떠야 함 */}
         <ImageUpload>
-          <img src={group && group.profile} />
+          <img
+            style={{ width: "300px", height: "242px" }}
+            src={`http://127.0.0.1:8000${group.profile}`}
+          />
         </ImageUpload>
         <GroupName>{group && group.name}</GroupName>
         <GroupDetail>{group && group.info}</GroupDetail>
@@ -210,8 +229,7 @@ const Signup2_old = () => {
               <ProfileImg>
                 <img
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  src={userObj.profile}
-                  alt={`Profile of ${userObj.user}`}
+                  src={`http://127.0.0.1:8000${userObj.profile}`}
                 />
               </ProfileImg>
               <NameText>{userObj.user}</NameText>
@@ -219,7 +237,7 @@ const Signup2_old = () => {
           ))}
         </BoxZone>
       </WhiteBox>
-      <NextBtn onClick={handleNextClick}>
+      <NextBtn onClick={onSubmit}>
         <img src={`${process.env.PUBLIC_URL}/images/nextbtn.svg`} alt="Next" />
       </NextBtn>
     </Container>

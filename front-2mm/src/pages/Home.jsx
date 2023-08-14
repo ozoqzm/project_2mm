@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import GroupItem from "./GroupItem";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -91,6 +93,33 @@ const Home = () => {
     // 로그아웃 부분 추가..
     navigate("/");
   };
+  // 그룹 가져오는 부분
+  const [postList, setPostList] = useState([]);
+  const [loading, setLoading] = useState(false); // f로딩 상태
+
+  // 토큰 추가
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Token ${token}` };
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // API 호출
+        const response = await axios.get(`http://127.0.0.1:8000/group/`, {
+          headers,
+        });
+        setPostList(response.data); // API 응답으로 받은 데이터를 state에 저장
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setLoading(false); // 로딩 상태 변경
+    };
+    fetchData();
+  }, []);
+  if (loading) {
+    return <div>대기중...</div>;
+  }
+
   return (
     <Container>
       <StickyBox>
@@ -108,9 +137,12 @@ const Home = () => {
       <BoxZone>
         {/* 사용자의 그룹 전체 리스트들 위에 불러오고.. 여기다간 GroupItem반복문 써서 돌리기
         -> 돌릴 때 props로 그룹 코드 전달 해야함 */}
+        {postList.map((e) => (
+          <GroupItem code={e.code} />
+        ))}
+        {/* <GroupItem></GroupItem>
         <GroupItem></GroupItem>
-        <GroupItem></GroupItem>
-        <GroupItem></GroupItem>
+        <GroupItem></GroupItem> */}
         <AddBox onClick={gotoAdd}>
           <img
             style={{ margin: "40px" }}
