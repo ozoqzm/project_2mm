@@ -214,7 +214,7 @@ class GroupDetailView(APIView):
     def patch(self, request, code, format=None):
         try:
             queryset = models.Group.objects.get(code=code)
-            serializer = serializers.GroupSerializer(queryset, data=request.data, partial=True)
+            serializer = serializers.GroupDetailSerializer(queryset, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
