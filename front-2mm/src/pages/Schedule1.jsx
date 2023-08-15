@@ -37,7 +37,7 @@ const SubTitle = styled.div`
   top: 15px;
   color: #282828;
   font-family: SUIT;
-  font-size: 20px;
+  font-size: 19px;
   font-style: normal;
   font-weight: 700;
   line-height: 141.5%; /* 33.96px */
@@ -141,8 +141,7 @@ const Schedule1 = () => {
         />
       </Title>
       <SubTitle>
-        일정의 날짜가 어떻게 되나요? <br />
-        (예: 7월 5일)
+        버튼을 누르고 <br />몇 월 며칠에 있는 일정인지 말해주세요.
       </SubTitle>
       <VoiceBtn onClick={handleVoiceBtnClick}>
         <img
