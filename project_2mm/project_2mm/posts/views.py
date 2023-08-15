@@ -50,8 +50,9 @@ class PostViewSet(viewsets.ModelViewSet):
 class GroupPostView(views.APIView):
     def get(self, request, group_code):
         try:
-            posts = Post.objects.get(group_code__code=group_code)
-            serializer = serializers.GroupPostSerializer(posts)
+            group = models.Group.objects.get(code=group_code)
+            posts = Post.objects.filter(group_code=group).order_by('-created_at')
+            serializer = serializers.GroupPostSerializer(posts, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Post.DoesNotExist:
