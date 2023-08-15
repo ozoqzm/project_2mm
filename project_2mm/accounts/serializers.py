@@ -69,9 +69,10 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class MypageSerializer(serializers.ModelSerializer) :
+    user = serializers.ReadOnlyField(source='user.all')
     class Meta :
         model = models.UserInfo
-        fields = ['profile', 'phone']
+        fields = ['profile', 'phone', 'user']
 
 class GroupDetailSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(many=True, source='user.all')  # Many-to-Many 관계에서 사용자 정보를 가져옵니다.

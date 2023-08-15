@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login , logout
+from django.contrib.auth.decorators import login_required
 from allauth.socialaccount.models import SocialAccount
 from .serializers import UsernameSerializer
 from . import serializers
@@ -233,3 +234,10 @@ class CurrentPageURL(APIView):
     def get(self, request):
         current_url = request.build_absolute_uri()
         return Response({'current_url': current_url})
+    
+
+#유저이름 
+class GetUsernameView(APIView):
+    def get(self, request, *args, **kwargs):
+        username = self.request.user.username
+        return Response({'username': username}, status=status.HTTP_200_OK)

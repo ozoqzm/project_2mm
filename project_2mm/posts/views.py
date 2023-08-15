@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from rest_framework import views
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status,viewsets
 from rest_framework.viewsets import ModelViewSet
@@ -11,6 +13,8 @@ from django.shortcuts import get_object_or_404
 from . import models
 from . import serializers
 from rest_framework.views import APIView
+
+
 # 특정 그룹 게시글 작성 
 class PostViewSet(viewsets.ModelViewSet):
     #post_list
@@ -166,6 +170,7 @@ class CommentView(views.APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'error': '작성자랑 유저랑 불일치'}, status=status.HTTP_403_FORBIDDEN)
+
 
 # 그룹별 앨범 사진목록 
 class AlbumViewSet(views.APIView):
