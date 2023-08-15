@@ -54,11 +54,6 @@ function ModalBasic({ setModalOpen, planID }) {
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.container} onClick={handleModalClick}>
         <img
-          className={styles.rewrite}
-          src={`${process.env.PUBLIC_URL}/images/rewrite (2).svg`}
-          alt="rewrite"
-        />
-        <img
           className={styles.delete}
           src={`${process.env.PUBLIC_URL}/images/delete (3).svg`}
           alt="delete"
