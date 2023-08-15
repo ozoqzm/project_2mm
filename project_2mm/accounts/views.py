@@ -7,8 +7,14 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login , logout
-from django.shortcuts import redirect
 
+from django.contrib.auth.decorators import login_required
+from allauth.socialaccount.models import SocialAccount
+
+
+from .serializers import UsernameSerializer
+
+from django.shortcuts import redirect
 from . import serializers
 from posts import models
 #from phonenumber_field.modelfields import PhoneNumber
@@ -89,12 +95,12 @@ class KakaoLoginView(APIView):
                     return Response({'message': '소셜 계정 연결 실패'}, status=status.HTTP_400_BAD_REQUEST)
 
                 # UserInfo 모델에 추가 정보 저장 또는 업데이트
-                nickname = user_info.get('kakao_account', {}).get('profile', {}).get('nickname')
+                # nickname = user_info.get('kakao_account', {}).get('profile', {}).get('nickname')
             
-                userinfo, _ = UserInfo.objects.get_or_create(user=user)
-                userinfo.nickname = nickname
-                userinfo.save()
-                return Response({'message': '로그인 성공'}, status=status.HTTP_200_OK)
+                # userinfo, _ = UserInfo.objects.get_or_create(user=user)
+                # userinfo.nickname = nickname
+                # userinfo.save()
+                # return Response({'message': '로그인 성공'}, status=status.HTTP_200_OK)
             
         return Response({'message': '로그인 실패'}, status=status.HTTP_400_BAD_REQUEST)
 #회원가입
@@ -275,4 +281,20 @@ class GroupDetailView(APIView):
         if group is None:
             return Response({'실패': '해당 모임 없음'},status=status.HTTP_404_NOT_FOUND)
         group.delete()
+
         return Response({'성공': '삭제완료'}, status=status.HTTP_204_NO_CONTENT)
+
+# 화상 공유시 url 발급 
+class CurrentPageURL(APIView):
+    def get(self, request):
+        current_url = request.build_absolute_uri()
+        return Response({'current_url': current_url})
+    
+
+#유저이름 
+class GetUsernameView(APIView):
+    def get(self, request, *args, **kwargs):
+        username = self.request.user.username
+        return Response({'username': username}, status=status.HTTP_200_OK)
+
+     
