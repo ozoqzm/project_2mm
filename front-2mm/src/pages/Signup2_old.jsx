@@ -136,9 +136,9 @@ const NameText = styled.div`
 const Signup2_old = () => {
   const navigate = useNavigate();
 
-  // const handleBackClick = () => {
-  //   navigate("/signup1_old");
-  // };
+  const handleBackClick = () => {
+    navigate("/signup1_old");
+  };
 
   const handleNextClick = () => {
     navigate("/signup3_old");
@@ -189,13 +189,14 @@ const Signup2_old = () => {
 
       navigate("/signup3_old");
     } catch (error) {
+      alert("올바른 초대코드가 아닙니다.");
       console.error("Error creating new post:", error);
     }
   };
 
   return (
     <Container>
-      <Back>
+      <Back onClick={handleBackClick}>
         <img src={`${process.env.PUBLIC_URL}/images/backbtn.svg`} alt="Back" />
       </Back>
       <SubTitle>
