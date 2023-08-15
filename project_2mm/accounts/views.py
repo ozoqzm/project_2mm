@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -7,12 +8,12 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login , logout
-
+from posts.models import UserInfo
 from django.contrib.auth.decorators import login_required
-from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.models import SocialApp, SocialToken
+from oauthlib.oauth2 import OAuth2Error
 
-
-from .serializers import UsernameSerializer
+from .serializers import UserInfoSerializer, UsernameSerializer
 
 from django.shortcuts import redirect
 from . import serializers
@@ -73,18 +74,43 @@ class LogoutView(APIView):
             print("현재 로그인되어 있지 않습니다.")
         return Response({'message': '로그아웃'}, status=status.HTTP_200_OK)
 
-#카카오 api 호출 
+# #카카오 api 호출 
 def get_kakao_user_info(access_token):
     headers = {'Authorization': f'Bearer {access_token}'}
     response = requests.get('https://kapi.kakao.com/v2/user/me', headers=headers)
 
+    print("Response status code:", response.status_code)
+
     if response.status_code == 200:
         user_info = response.json()
+        print("User info:", user_info)
         return user_info
     else:
+        print("실패실패실패!", response.content)
         return None
     
-# #카카오로그인 
+# #카카오 토큰 값 부여 
+# def handle_kakao_callback(request):
+#     access_token = request.GET.get('access_token')
+#     try:
+#         kakao_app = SocialApp.objects.get(provider='kakao')
+
+#         user_info = get_kakao_user_info(access_token)  
+
+#         fetched_name = user_info.get('properties', {}).get('nickname')
+#         user = request.user
+
+#         if user.is_authenticated:
+        
+#             userinfo, created = UserInfo.objects.get_or_create(user=user)
+#             userinfo.user = fetched_name
+#             userinfo.save()
+
+#             return HttpResponse("UserInfo 업데이트 .")
+#         else:
+#             return HttpResponse("UserInfo 업데이트 실패")
+#     except OAuth2Error:
+#         return HttpResponse("에러")
 
 # class KakaoLoginView(APIView):
 #     def post(self, request, *args, **kwargs):

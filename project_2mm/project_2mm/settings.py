@@ -75,12 +75,14 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': '2103c1e9e9ec3c9736da56b28c6bbe14',
             'secret': 954168,
-            'callback_url': '',
+            'sites': 'http://127.0.0.1:8000/',
+            'callback_url': 'http://127.0.0.1:8000/authaccounts/kakao/login/callback/',
             'key': ''
         }
     }
 }
 
+SOCIALACCOUNT_ADAPTER = 'accounts.adapters.SocialAccountAdapter' 
 
 
 LOGIN_REDIRECT_URL = '/'
