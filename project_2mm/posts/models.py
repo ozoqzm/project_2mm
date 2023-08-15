@@ -9,7 +9,6 @@ User = get_user_model()
 class Post(models.Model) :
     # Group 모델의 코드 값을 참조
     group_code = models.ForeignKey('Group', on_delete=models.CASCADE, related_name='posts', null=True)
-
     content = models.TextField()
     image = models.ImageField(verbose_name="이미지", blank=True, null=True, upload_to='posts_img')
     created_at = models.DateTimeField(verbose_name="작성일", auto_now_add=True)

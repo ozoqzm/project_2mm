@@ -50,12 +50,19 @@ class PostViewSet(viewsets.ModelViewSet):
 class GroupPostView(views.APIView):
     def get(self, request, group_code):
         try:
-            group = models.Group.objects.get(code=group_code)
-            posts = Post.objects.filter(group_code=group)
-            serializer = serializers.GroupPostSerializer(posts, many=True)
-            return Response(serializer.data)
-        except models.Group.DoesNotExist:
-            return Response({'error': '그룹 x'},status=status.HTTP_404_NOT_FOUND)
+            posts = Post.objects.get(group_code__code=group_code)
+            serializer = serializers.GroupPostSerializer(posts)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            return Response({'error': '게시글x'}, status=status.HTTP_404_NOT_FOUND)
+        # try:
+        #     group = models.Group.objects.get(code=group_code)
+        #     posts = Post.objects.filter(group_code=group)
+        #     serializer = serializers.GroupPostSerializer(posts, many=True)
+        #     return Response(serializer.data)
+        # except models.Group.DoesNotExist:
+        #     return Response({'error': '그룹 x'},status=status.HTTP_404_NOT_FOUND)
     
     def post(self, request, group_code, *args, **kwargs):
         if request.user.is_authenticated:
