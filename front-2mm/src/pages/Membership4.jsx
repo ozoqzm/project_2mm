@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -85,12 +87,26 @@ const Membership4 = () => {
     }
   };
 
+  // 로그인한 유저 이름 받아오기
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져옴
+    const headers = { Authorization: `Token ${token}` }; // 헤더에 토큰 추가
+    axios
+      .get(`http://127.0.0.1:8000/get-username/`, { headers })
+      .then((response) => {
+        setUser(response.data);
+        console.log(user);
+      });
+  }, []);
+
   return (
     <Container>
       <Back>&nbsp;</Back>
       <Title></Title>
       <SubTitle>
-        이순재님, <br />
+        {user && user.username}님, <br />
         참여할 모임이 있으신가요?
       </SubTitle>
       <Group_O onClick={onClickGroupO}>

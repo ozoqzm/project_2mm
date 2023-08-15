@@ -21,6 +21,8 @@ urlpatterns = [
     path('group/', views.GroupListCreateView.as_view(), name='group-list-create'),
     path('group/<uuid:code>/', views.GroupDetailView.as_view(http_method_names=['get', 'patch', 'delete']), name='group-detail'),
 
+    #유저이름 
+    path('get-username/', views.GetUsernameView.as_view(), name='get-username'),
     # 마이페이지 
     path('mypage/', views.MypageView.as_view(), name='mypage'),
 ]
