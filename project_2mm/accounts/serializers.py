@@ -51,7 +51,7 @@ class GroupCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.Group
-        fields = ['name', 'code']  # 코드 필드도 포함
+        fields = ['name', 'code', 'profile']  # 코드 필드도 포함
 
 class GroupSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(many=True, source='user.all') 
@@ -63,6 +63,7 @@ class GroupSerializer(serializers.ModelSerializer):
         # 코드 값을 무시하고 업데이트할 필드만 validated_data에서 추출하는 메소드
         validated_data.pop('code', None)
         return super().update(instance, validated_data)
+
 class GroupDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Group
