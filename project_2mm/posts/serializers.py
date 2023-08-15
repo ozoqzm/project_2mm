@@ -24,17 +24,17 @@ class CommentSerializer(ModelSerializer):
 
 class GroupPostSerializer(ModelSerializer):
     liked = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    writer = UserInfoSerializer()  # 수정된 부분
-    
+    writer_profile = serializers.ImageField(source='writer.userinfo.profile', read_only=True)
+
+    # writer = UserInfoSerializer()  # 수정된 부분
     # # Profile, name 등 원하는 정보를 필드로 추가할 수 있습니다.
     # writer_profile = serializers.CharField(source='user.all.profile')
     # writer_name = serializers.CharField(source='user.all.user.username')
     class Meta:
         model = Post
-        fields = '__all__'
-
-    # def get_writer(self, obj):
-    #     return obj.writer.user.username if obj.writer else None
+        fields = ['id', 'content', 'image', 'created_at', 'writer', 'writer_profile', 'liked']
+    def get_writer(self, obj):
+        return obj.writer.user.username if obj.writer else None
 
 class GroupDetailSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(many=True, source='user.all')

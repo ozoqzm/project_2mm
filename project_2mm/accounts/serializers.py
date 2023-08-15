@@ -29,14 +29,6 @@ class UsersSerializer(serializers.ModelSerializer):
         # 전화번호 업데이트
         if 'phone' in validated_data:
             instance.phone = validated_data['phone']
-        #user = instance.user
-        # 비밀번호 업데이트
-        if 'password' in validated_data:
-            new_password = validated_data['password']
-            # user.set_password(new_password)
-            # user.save()
-            instance.user.set_password(new_password)
-            instance.user.save()
 
         instance.save()
         return instance
