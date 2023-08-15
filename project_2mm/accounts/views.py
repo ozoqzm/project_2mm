@@ -210,17 +210,18 @@ class GroupDetailView(APIView):
         
         serializer = serializers.GroupDetailSerializer(group)
         return Response(serializer.data)
-        
+    
     def patch(self, request, code, format=None):
         try:
             group = models.Group.objects.get(code=code)
-    
-            # Check if the user is not in the group
+            
             user_info, created = models.UserInfo.objects.get_or_create(user=request.user)
+            
+            # 요청한 사용자만 추가
             if not group.user.filter(user=user_info.user).exists():
                 group.user.add(user_info)  # Add the user to the group
-    
-            serializer = serializers.GroupDetailSerializer(group, data=request.data, partial=True)
+            
+            serializer = serializers.GroupSerializer(group, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -233,19 +234,26 @@ class GroupDetailView(APIView):
         except Exception as e:
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        # try:
+        #     group = models.Group.objects.get(code=code)
+    
+        #     # Check if the user is not in the group
+        #     user_info, created = models.UserInfo.objects.get_or_create(user=request.user)
+        #     if not group.user.filter(user=user_info.user).exists():
+        #         group.user.add(user_info)  # Add the user to the group
+    
+        #     serializer = serializers.GroupDetailSerializer(group, data=request.data, partial=True)
+        #     if serializer.is_valid():
+        #         serializer.save()
+        #         return Response(serializer.data)
+        #     else:
+        #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # except models.Group.DoesNotExist:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+        # except models.UserInfo.DoesNotExist:
+        #     return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+        # except Exception as e:
+        #     return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         # try:
         #     queryset = models.Group.objects.get(code=code)
         #     serializer = serializers.GroupDetailSerializer(queryset, data=request.data, partial=True)
