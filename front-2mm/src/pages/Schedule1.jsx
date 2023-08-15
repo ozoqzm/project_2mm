@@ -28,7 +28,7 @@ const Back = styled.div`
 const Title = styled.div`
   position: relative;
   top: -23px;
-  left: 140px;
+  left: 130px;
 `;
 
 const SubTitle = styled.div`
@@ -74,7 +74,7 @@ const InputText = styled.input`
 const NextBtn = styled.div`
   position: relative;
   top: 300px;
-  left: 20px;
+  left: 22px;
 `;
 
 const Schedule1 = () => {

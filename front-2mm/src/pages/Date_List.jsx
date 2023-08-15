@@ -47,45 +47,16 @@ const Back = styled.div`
 
 const Year = styled.div`
   position: relative;
-  width: 45px;
+  width: 100px;
   height: 18px;
-  left: 172px;
-  top: 30px;
-`;
-
-const Month = styled.div`
-  position: relative;
-  width: 60px;
-  height: 38px;
-  left: 172px;
-  top: 40px;
+  left: 140px;
+  top: 20px;
 
   font-family: "SUIT";
   font-style: normal;
   font-weight: 700;
   font-size: 30px;
-  line-height: 38px;
-  color: #0057ff;
-`;
-
-const Pass = styled.button`
-  position: relative;
-  width: 45px;
-  height: 18px;
-  left: 120px;
-  top: 10px;
-  background-color: transparent;
-  border: none;
-`;
-
-const Next = styled.button`
-  position: relative;
-  width: 45px;
-  height: 18px;
-  left: 180px;
-  top: 10px;
-  background-color: transparent;
-  border: none;
+  line-height: 18px;
 `;
 
 const Date_Whitebox = styled.div`
@@ -277,9 +248,7 @@ const Date_List = () => {
       <Back onClick={gotoBack}>
         <img src={`${process.env.PUBLIC_URL}/images/backbtn.svg`} alt="Back" />
       </Back>
-      <Year>
-        <img src={`${process.env.PUBLIC_URL}/images/year.svg`} alt="Year" />
-      </Year>
+      <Year>2023년</Year>
       {/* {`${currentMonth}월`} */}
       {/* 기존의 일정 Whitebox */}
       <BoxZone>

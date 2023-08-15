@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+//import KakaoLogin from "react-kakao-login";
 
 const Container = styled.div`
   position: relative;
@@ -32,7 +33,7 @@ const CenterZone = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 290px;
+  margin-top: 365px;
 `;
 const DesignImg = styled.div`
   position: absolute;
@@ -64,17 +65,39 @@ const Splash = () => {
   const gotoLogin = () => {
     navigate("/Login");
   };
-  const handleKakaoLogin = async () => {
-    try {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/authaccounts/kakao/login/`
-      );
-      // 로그인 성공 후의 처리
-      navigate("/Home");
-    } catch (error) {
-      console.error("카카오 로그인 요청 실패:", error);
-    }
-  };
+
+  // const handleKakaoLogin = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://127.0.0.1:8000/authaccounts/kakao/login/`
+  //     );
+  //     // 로그인 성공 후의 처리
+  //     navigate("/Home");
+  //   } catch (error) {
+  //     console.error("카카오 로그인 요청 실패:", error);
+  //   }
+  // };
+
+  // const responseKakao = async (response) => {
+  //   // 카카오 로그인 응답 처리
+  //   console.log(response);
+  //   navigate("/Home");
+
+  //   // 카카오 로그인 성공 후 사용자 정보를 백엔드로 전송
+  //   try {
+  //     const backendResponse = await axios.post(
+  //       `http://127.0.0.1:8000/authaccounts/kakao/login/`,
+  //       {
+  //         access_token: response.response.access_token, // 카카오에서 받은 액세스 토큰 전송
+  //       }
+  //     );
+
+  //     // 서버로부터 받은 응답 처리
+  //     console.log("백엔드 응답:", backendResponse.data);
+  //   } catch (error) {
+  //     console.error("백엔드 요청 실패:", error);
+  //   }
+  // };
 
   return (
     <Container>
@@ -92,9 +115,16 @@ const Splash = () => {
         />
       </DesignImg>
       <CenterZone>
-        <KakaoBtn onClick={handleKakaoLogin}>
+        {/* <div>
+          <KakaoLogin
+            token="954168"
+            onSuccess={responseKakao}
+            onFailure={(error) => console.log(error)}
+          />
+        </div> */}
+        {/* <KakaoBtn onClick={handleKakaoLogin}>
           <img src={`${process.env.PUBLIC_URL}/images/kakaobtn_s.svg`} />
-        </KakaoBtn>
+        </KakaoBtn> */}
         <SignUpBtn onClick={gotoSignUp}>
           <img src={`${process.env.PUBLIC_URL}/images/signupbtn_s.svg`} />
         </SignUpBtn>

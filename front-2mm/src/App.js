@@ -12,7 +12,6 @@ import Post1 from "./pages/Post1";
 import Post2 from "./pages/Post2";
 import Post3 from "./pages/Post3";
 import Schedule1 from "./pages/Schedule1";
-import Schedule2 from "./pages/Schedule2";
 import GroupHome from "./pages/GroupHome";
 import Album from "./pages/Album";
 import ScreenProgress from "./pages/ScreenProgress";
@@ -55,7 +54,6 @@ function App() {
           <Route path="/Post2" element={<Post2 />} />{" "}
           <Route path="/Post3" element={<Post3 />} />{" "}
           <Route path="/Schedule1" element={<Schedule1 />} />{" "}
-          <Route path="/Schedule2" element={<Schedule2 />} />{" "}
           <Route path="/Signup1_old" element={<Signup1_old />} />{" "}
           <Route path="/Signup2_old" element={<Signup2_old />} />{" "}
           <Route path="/Signup3_old" element={<Signup3_old />} />{" "}

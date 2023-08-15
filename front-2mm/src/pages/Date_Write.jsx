@@ -77,7 +77,7 @@ const InputDate2 = styled.input`
 
 const NewBtn = styled.div`
   position: relative;
-  top: 260px;
+  top: 290px;
   left: 22px;
 `;
 
