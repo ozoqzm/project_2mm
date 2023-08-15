@@ -8,6 +8,7 @@ urlpatterns = [
 
     #소셜로그인 
     path('authaccounts/', include('allauth.urls')),
+    # path('authaccounts/kakao/login/callback/', views.handle_kakao_callback, name='kakao_callback'),
 
     # path('accounts/kakao/login/', views.kakao_login, name='kakao_login'),
     # path('accounts/kakao/callback/', views.kakao_callback, name='kakao_callback'),

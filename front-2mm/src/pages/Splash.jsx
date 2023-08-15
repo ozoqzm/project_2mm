@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -53,15 +54,26 @@ const LoginBtn = styled.div`
 const Splash = () => {
   const navigate = useNavigate();
 
-  const gotoKakao = () => {
-    // 추후 설정
-    //navigate("/");
-  };
+  // const gotoKakao = () => {
+  //   // 추후 설정
+  //   //navigate("/");
+  // };
   const gotoSignUp = () => {
     navigate("/Membership");
   };
   const gotoLogin = () => {
     navigate("/Login");
+  };
+  const handleKakaoLogin = async () => {
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/authaccounts/kakao/login/`
+      );
+      // 로그인 성공 후의 처리
+      navigate("/Home");
+    } catch (error) {
+      console.error("카카오 로그인 요청 실패:", error);
+    }
   };
 
   return (
@@ -80,7 +92,7 @@ const Splash = () => {
         />
       </DesignImg>
       <CenterZone>
-        <KakaoBtn onClick={gotoKakao}>
+        <KakaoBtn onClick={handleKakaoLogin}>
           <img src={`${process.env.PUBLIC_URL}/images/kakaobtn_s.svg`} />
         </KakaoBtn>
         <SignUpBtn onClick={gotoSignUp}>
