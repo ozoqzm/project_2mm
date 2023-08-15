@@ -1,6 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import styled from "styled-components";
+import ModalBasic from "./ModalBasic_date";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -9,7 +12,23 @@ const Container = styled.div`
   height: 740px;
   background: white;
   border: 1px solid gray;
-  margin: auto;
+  margin: 30px auto;
+  overflow-y: scroll; /* 세로 스크롤 유지 */
+  overflow-x: hidden; /* 가로 스크롤 숨김 */
+
+  /* 스크롤바 스타일 지정 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 
   @media screen and (max-width: 768px) {
     width: 100%;
@@ -22,6 +41,8 @@ const Back = styled.div`
   position: relative;
   margin-top: 17px;
   margin-left: 15px;
+  background-color: transparent;
+  border: none;
 `;
 
 const Year = styled.div`
@@ -34,73 +55,238 @@ const Year = styled.div`
 
 const Month = styled.div`
   position: relative;
-  width: 45px;
-  height: 18px;
+  width: 60px;
+  height: 38px;
   left: 172px;
   top: 40px;
+
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 38px;
+  color: #0057ff;
 `;
 
-const Pass = styled.div`
+const Pass = styled.button`
   position: relative;
   width: 45px;
   height: 18px;
   left: 120px;
   top: 10px;
+  background-color: transparent;
+  border: none;
 `;
 
-const Next = styled.div`
+const Next = styled.button`
   position: relative;
   width: 45px;
   height: 18px;
-  left: 240px;
-  bottom: 10px;
+  left: 180px;
+  top: 10px;
+  background-color: transparent;
+  border: none;
 `;
 
 const Date_Whitebox = styled.div`
   position: relative;
-  width: 45px;
+  width: 350px;
+  height: 138px;
+  left: calc(50% - 350px / 2);
+  top: 0px;
+  margin-bottom: 15px;
+
+  background: #ffffff;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+`;
+
+const DateText = styled.div`
+  position: relative;
+  width: 200px;
   height: 18px;
-  left: 5px;
-  top: 50px;
+  left: 20px;
+  top: 17px;
+
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+
+  color: #000000;
+`;
+
+const TitleLink = styled.div`
+  position: relative;
+  width: 200px;
+  height: 44px;
+  left: 18px;
+  top: 30px;
+  display: block;
+  text-decoration: none;
+  color: #0057ff;
+
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 44px;
+`;
+
+const Memo = styled.div`
+  position: relative;
+  width: 180px;
+  height: 18px;
+  left: 18px;
+  top: 40px;
+
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+
+  color: #202020;
+`;
+
+const More = styled.div`
+  position: relative;
+  top: -60px;
+  left: 300px;
 `;
 
 const PlusBtn = styled.div`
-  position: relative;
+  position: absolute;
   width: 45px;
   height: 18px;
   left: 260px;
-  top: 500px;
+  top: 630px;
 `;
+const BoxZone = styled.div`
+  position: relative;
+  top: 50px;
+  max-width: 360px;
+  height: 580px;
+  margin: auto;
+  // background: pink;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    /* WebKit 브라우저의 스크롤바를 숨김 */
+    width: 0;
+    background: transparent;
+  }
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   align-items: center;
+`;
+
+// 일정박스 하나하나 컴포넌트
+const PlanItem = ({ planID }) => {
+  const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // 이거 대신 모달창 함수. 모달창에 정보 전달하고 모달창 구현 페이지에서
+  // 삭제 불러오기
+  // const goAlbumDetail = () => {
+  //   navigate(`/AlbumDetail/${postID}`);
+  // };
+  const [post, setPost] = useState(null);
+  const code = localStorage.getItem("code");
+
+  useEffect(() => {
+    axios
+      .get(`http://127.0.0.1:8000/group/${code}/plans/${planID}`)
+      .then((response) => {
+        setPost(response.data);
+      });
+  }, []);
+
+  return (
+    <>
+      <Date_Whitebox>
+        <DateText>{post && post.month}</DateText>
+        <TitleLink>{post && post.title}</TitleLink>
+        <Memo>{post && post.memo}</Memo>
+        <More onClick={() => setModalOpen(true)}>
+          <img src={`${process.env.PUBLIC_URL}/images/more.svg`} alt="More" />
+        </More>
+        {modalOpen && (
+          <>
+            <div
+              className="modal-overlay"
+              onClick={() => setModalOpen(false)}
+            />
+            <ModalBasic
+              setModalOpen={setModalOpen}
+              closeModal={() => setModalOpen(false)}
+            />
+          </>
+        )}
+      </Date_Whitebox>
+    </>
+  );
+};
 
 const Date_List = () => {
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const gotoBack = () => {
+    //   const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+    //   navigate(`/Date_List?month=${prevMonth}`);
+    navigate(`/GroupHome`);
+  };
 
   const gotoNext = () => {
-    navigate("/Date_Detail");
+    navigate("/Schedule1");
   };
-  const gotoBack = () => {
-    navigate("/GroupHome");
-  };
+
+  //일정 리스트들 불러오기
+  const [loading, setLoading] = useState(false);
+  const [postList, setPostList] = useState([]);
+  const code = localStorage.getItem("code");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // API 호출
+        const response = await axios.get(
+          `http://127.0.0.1:8000/group/${code}/plans/`
+        );
+        setPostList(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setLoading(false); // 로딩 상태 변경
+    };
+    fetchData(); // useEffect에서 fetchData 함수 호출
+  }, []);
+
+  if (loading) {
+    return <div>대기중...</div>;
+  }
+
   return (
     <Container>
       <Back onClick={gotoBack}>
-        <img src={`${process.env.PUBLIC_URL}/images/backbtn.svg`} />
+        <img src={`${process.env.PUBLIC_URL}/images/backbtn.svg`} alt="Back" />
       </Back>
       <Year>
-        <img src={`${process.env.PUBLIC_URL}/images/year.svg`} />
+        <img src={`${process.env.PUBLIC_URL}/images/year.svg`} alt="Year" />
       </Year>
-      <Month>
-        <img src={`${process.env.PUBLIC_URL}/images/month.svg`} />
-      </Month>
-      <Pass>
-        <img src={`${process.env.PUBLIC_URL}/images/pass.svg`} />
-      </Pass>
-      <Next>
-        <img src={`${process.env.PUBLIC_URL}/images/next.svg`} />
-      </Next>
-      <Date_Whitebox>
-        <img src={`${process.env.PUBLIC_URL}/images/date_whitebox.svg`} />
-      </Date_Whitebox>
+      {/* {`${currentMonth}월`} */}
+      {/* 기존의 일정 Whitebox */}
+      <BoxZone>
+        {/* 추가된 리스트 아이템들-> 나중에 이 코드 사용해서 연동 */}
+        {postList.map((item) => (
+          <PlanItem key={item.id} planID={item.id}></PlanItem>
+        ))}
+      </BoxZone>
+      {/* 추가 페이지로 이동 버튼 */}
       <PlusBtn onClick={gotoNext}>
         <img src={`${process.env.PUBLIC_URL}/images/plusbtn.svg`} />
       </PlusBtn>

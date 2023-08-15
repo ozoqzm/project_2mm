@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -82,9 +83,38 @@ const NewBtn = styled.div`
 
 const Date_Write = () => {
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [newTitle, setNewTitle] = useState(""); // 추가
+  const [newMemo, setNewMemo] = useState(""); // 추가
 
   const onClick = () => {
-    navigate("/Date_List");
+    const code = localStorage.getItem("code");
+    const recognizedText = localStorage.getItem("recognizedText");
+    const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져옴
+    const headers = { Authorization: `Token ${token}` }; // 헤더에 토큰 추가
+
+    console.log(newTitle);
+    console.log(newMemo);
+    console.log(recognizedText);
+    // 서버에 어차피 저장시켜야 함
+    // navigate(`/Date_List`, {
+    //   state: { newTitle: newTitle, newMemo: newMemo },
+    // });
+    // 구분
+    try {
+      const response = axios.post(
+        `http://127.0.0.1:8000/group/${code}/plans/`,
+        {
+          month: recognizedText,
+          title: newTitle,
+          memo: newMemo,
+        },
+        { headers }
+      );
+      navigate("/Date_List");
+    } catch (error) {
+      console.error("모임 생성 실패:", error);
+    }
   };
 
   return (
@@ -98,11 +128,19 @@ const Date_Write = () => {
       <SubTitle>
         <img src={`${process.env.PUBLIC_URL}/images/subtitle_ask (2).svg`} />
       </SubTitle>
-      <InputDate></InputDate>
+      <InputDate
+        value={newTitle}
+        onChange={(e) => setNewTitle(e.target.value)}
+        placeholder="일정제목을 입력하세요"
+      />
       <SubTitle2>
         <img src={`${process.env.PUBLIC_URL}/images/subtitle_write.svg`} />
       </SubTitle2>
-      <InputDate2></InputDate2>
+      <InputDate2
+        value={newMemo}
+        onChange={(e) => setNewMemo(e.target.value)}
+        placeholder="메모를 입력하세요"
+      ></InputDate2>
       <NewBtn onClick={onClick}>
         <img src={`${process.env.PUBLIC_URL}/images/newbtn.svg`} />
       </NewBtn>

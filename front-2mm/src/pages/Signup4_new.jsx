@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -39,17 +39,16 @@ const Detail = styled.div`
   left: 25px;
 `;
 
-const InputGroupcode = styled.div`
+const CopyBox = styled.input`
   position: relative;
   width: 300px;
-  height: 35px;
+  height: 50px;
   left: 22px;
   top: 70px;
   border-radius: 7px;
   border: 1.5px solid #0085ff;
-  font-size: 16px;
+  font-size: 20px;
   padding-left: 15px;
-  padding-top: 13px;
 
   ::placeholder {
     color: #7c7c7c;
@@ -64,18 +63,47 @@ const CopyBtn = styled.div`
 
 const NextBtn = styled.button`
   position: relative;
-  top: 400px;
-  left: 22px;
+  top: 280px;
+  left: 20px;
   background: transparent;
   border: none;
 `;
 
+const CopyAlert = styled.div`
+  position: relative;
+  margin-top: 120px;
+  left: 100px;
+  color: gray; /* 복사됨 텍스트의 색상 */
+`;
+
 const Signup4_new = () => {
   const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+  const copyBoxRef = useRef(null);
+
+  const handleBackClick = () => {
+    navigate("/signup3_new"); // Go back to the previous page
+  };
 
   const handleNextClick = () => {
     navigate("/signup5_new"); // Use navigate to transition to another page
   };
+
+  const handleCopyClick = () => {
+    if (copyBoxRef.current) {
+      const range = document.createRange();
+      range.selectNode(copyBoxRef.current);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand("copy");
+      window.getSelection().removeAllRanges();
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000); // 2초 후에 복사됨 상태 리셋
+    }
+  };
+
   return (
     <Container>
       <Back>&nbsp;</Back>
@@ -85,10 +113,11 @@ const Signup4_new = () => {
       <SubTitle>
         <img src={`${process.env.PUBLIC_URL}/images/subtitle_invite2.svg`} />
       </SubTitle>
-      <InputGroupcode>{localStorage.getItem("code")}</InputGroupcode>
-      <CopyBtn>
+      <CopyBox>{localStorage.getItem("code")}</CopyBox>
+      <CopyBtn onClick={handleCopyClick}>
         <img src={`${process.env.PUBLIC_URL}/images/copybtn.svg`} />
       </CopyBtn>
+      <CopyAlert>{copied ? "주소가 복사되었습니다" : " "} </CopyAlert>
       <NextBtn onClick={handleNextClick}>
         {" "}
         {/* Call handleNextClick */}
