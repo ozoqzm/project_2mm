@@ -185,10 +185,13 @@ class GroupListCreateView(generics.CreateAPIView):
         
         group = serializer.save()
         group.code = uuid.uuid4()
-        group.save()
+        #group.save()
         
-        group.user.add(userinfo)
 
+        profile_image = self.request.data.get('profile_image', None)
+        group.profile = profile_image
+        group.save()
+        group.user.add(userinfo)
     def get(self, request):
         user = self.request.user
         groups = models.Group.get_groups_for_user(user)
@@ -208,7 +211,7 @@ class GroupDetailView(APIView):
         if group is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-        serializer = serializers.GroupDetailSerializer(group)
+        serializer = serializers.GroupSerializer(group)
         return Response(serializer.data)
     
     def patch(self, request, code, format=None):
