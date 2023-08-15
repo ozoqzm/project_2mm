@@ -14,11 +14,10 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
-
 const Back = styled.button`
   position: relative;
   margin-top: 17px;
@@ -34,16 +33,18 @@ const SubTitle = styled.div`
   left: 25px;
 `;
 
-const InputDetail = styled.input`
+const InputDetail = styled.textarea`
   position: relative;
   width: 300px;
-  height: 161px;
+  height: 151px;
   left: 22px;
   top: 55px;
   border-radius: 7px;
   border: 1.5px solid #0085ff;
   font-size: 20px;
   padding-left: 15px;
+  padding-top: 10px;
+  resize: none;
 
   ::placeholder {
     color: #7c7c7c;

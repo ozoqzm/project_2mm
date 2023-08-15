@@ -7,7 +7,7 @@ import axios from "axios";
 const Container = styled.div`
   position: relative;
   margin: 30px 0;
-  width: 375px;
+  max-width: 375px;
   height: 740px;
   background: white;
   border: 1px solid gray;
@@ -15,8 +15,8 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -138,11 +138,20 @@ const Post1 = () => {
     const fetchData = async () => {
       try {
         const code = localStorage.getItem("code");
+        const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://127.0.0.1:8000/group/${code}/posts/`
+          `http://127.0.0.1:8000/group/${code}/posts/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
 
         console.log("Received data from API:", response.data);
+        console.log(token);
+        console.log(code);
 
         const postsWithLike = response.data.map((post) => ({
           ...post,
@@ -164,8 +173,8 @@ const Post1 = () => {
   };
 
   const onUpdateButtonClick = (postId) => {
-    setSelectedPostId(postId);
-    navigate(`/Post4/${selectedPostId}`); // 수정할 게시글의 ID를 URL에 포함하여 이동
+    setSelectedPostId(postId); // 수정할 게시글의 ID를 저장
+    setModalOpen(true); // 모달 열기
   };
 
   const onClickHeart = (postId) => {

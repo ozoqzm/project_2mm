@@ -15,8 +15,8 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -55,7 +55,7 @@ const Profile = styled.div`
   border-radius: 25px; /* 반지름을 width와 height의 절반으로 설정 */
   overflow: hidden; /* 이미지가 테두리를 넘어가지 않도록 설정 */
   top: 15px;
-  left: 10px;
+  left: 15px;
 `;
 
 const Name = styled.div`
@@ -78,7 +78,7 @@ const CommentDetail = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  top: -30px;
+  top: -35px;
   left: 73px;
 `;
 
@@ -90,15 +90,15 @@ const Date = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  top: -80px;
-  left: 310px;
+  top: -90px;
+  left: 200px;
 `;
 
 const VoiceBtn = styled.div`
   position: relative;
   height: 55px;
   width: 375px;
-  top: 4px;
+  top: 7px;
   cursor: pointer; /* 마우스 커서를 손가락 모양으로 변경 */
 `;
 
@@ -131,9 +131,9 @@ const PostBtn = styled.div`
   top: -19px;
 `;
 
-const DivisionBar = styled.div`
+const Hr = styled.hr`
   position: relative;
-  top: -38px;
+  margin-top: -30px;
 `;
 
 const Post3 = () => {
@@ -307,13 +307,7 @@ const Post3 = () => {
               <Name>{comment.writer}</Name>
               <CommentDetail>{comment.comment}</CommentDetail>
               <Date>{comment.createdAt}</Date>
-              <DivisionBar>
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/division.svg`}
-                  alt="comment"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </DivisionBar>
+              <Hr />
             </div>
           ))}
         </CommentBox>

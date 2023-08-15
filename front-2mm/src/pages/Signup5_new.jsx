@@ -11,10 +11,11 @@ const Container = styled.div`
   background: white;
   border: 1px solid gray;
   margin: 30px auto;
+
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 

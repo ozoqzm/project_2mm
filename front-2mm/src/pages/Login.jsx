@@ -43,8 +43,9 @@ const InputNumber = styled.input`
   top: 55px;
   border-radius: 7px;
   border: 1.5px solid #0085ff;
-  font-size: 20px;
+  font-size: 15px;
   padding-left: 15px;
+
   ::placeholder {
     color: #7c7c7c;
   }
@@ -76,7 +77,7 @@ const Login = () => {
       {/* 인풋 박스 */}
       <InputNumber
         type="text"
-        placeholder="+8210뒤에 전화번호 8자리를 입력해주세요"
+        placeholder="+8210 뒤에 전화번호 8자리를 입력해주세요"
         value={phnumber}
         onChange={(e) => setPhnumber(e.target.value)}
       ></InputNumber>

@@ -7,10 +7,11 @@ import axios from "axios";
 
 function ModalBasic({ setModalOpen, postId, groupCode, setPosts }) {
   const navigate = useNavigate();
+  const code = localStorage.getItem("code");
 
   // Post4 페이지로 이동하는 함수, postId와 groupCode 전달
   const btnPost4 = () => {
-    navigate(`/Post4/${postId}/${groupCode}`); // Post4 페이지로 이동하면서 postId와 groupCode 전달
+    navigate(`/Post4/${postId}/${code}`); // Post4 페이지로 이동하면서 postId와 code 전달
   };
 
   // 모달 끄기
@@ -22,12 +23,16 @@ function ModalBasic({ setModalOpen, postId, groupCode, setPosts }) {
   const onDeletePost = async () => {
     try {
       const token = localStorage.getItem("token");
+      const code = localStorage.getItem("code");
+      console.log(token);
+      console.log(code);
+      console.log(postId);
 
       const response = await axios.delete(
-        `http://127.0.0.1:8000/group/${groupCode}/posts/${postId}/`,
+        `http://127.0.0.1:8000/group/${code}/posts/${postId}/`,
         {
           headers: {
-            Authorization: `Token ${token}`,
+            Authorization: `Token ${token}`, // Use "Bearer" prefix
             "Content-Type": "application/json",
           },
         }

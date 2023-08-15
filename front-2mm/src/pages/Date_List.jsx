@@ -13,22 +13,6 @@ const Container = styled.div`
   background: white;
   border: 1px solid gray;
   margin: 30px auto;
-  overflow-y: scroll; /* 세로 스크롤 유지 */
-  overflow-x: hidden; /* 가로 스크롤 숨김 */
-
-  /* 스크롤바 스타일 지정 */
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0);
-    border-radius: none;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
 
   @media screen and (max-width: 768px) {
     width: 100%;

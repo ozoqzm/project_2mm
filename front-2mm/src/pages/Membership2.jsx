@@ -14,8 +14,8 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -45,7 +45,7 @@ const InputPhone = styled.input`
   top: 55px;
   border-radius: 7px;
   border: 1.5px solid #0085ff;
-  font-size: 20px;
+  font-size: 17px;
   padding-left: 15px;
 
   ::placeholder {
@@ -107,7 +107,7 @@ const Membership2 = () => {
         />
       </SubTitle>
       <InputPhone
-        placeholder="+8210뒤에 8자리 숫자 입력해주세요."
+        placeholder="+8210 뒤에 8자리 숫자 입력해주세요."
         value={phone}
         onChange={handlePhoneChange}
       />

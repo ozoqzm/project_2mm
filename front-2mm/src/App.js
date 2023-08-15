@@ -26,11 +26,11 @@ import Signup3_new from "./pages/Signup3_new";
 import Signup4_new from "./pages/Signup4_new";
 import Signup5_new from "./pages/Signup5_new";
 import Date_List from "./pages/Date_List";
-import Date_Detail from "./pages/Date_Detail";
 import Date_Plus from "./pages/Date_Plus";
 import Date_Write from "./pages/Date_Write";
 import AlbumDetail from "./pages/AlbumDetail";
 import Post4 from "./pages/Post4";
+import AddFamily from "./pages/AddFamily";
 
 function App() {
   return (
@@ -64,8 +64,8 @@ function App() {
           <Route path="/Signup4_new" element={<Signup4_new />} />{" "}
           <Route path="/Signup5_new" element={<Signup5_new />} />{" "}
           <Route path="/Date_List" element={<Date_List />} />{" "}
-          <Route path="/Date_Detail" element={<Date_Detail />} />{" "}
           <Route path="/Date_Plus" element={<Date_Plus />} />{" "}
+          <Route path="/AddFamily" element={<AddFamily />} />{" "}
           <Route path="/Date_Write" element={<Date_Write />} />{" "}
           <Route path="/AlbumDetail/:postID" element={<AlbumDetail />} />{" "}
           <Route path="/Post3/:postId" element={<Post3 />} />

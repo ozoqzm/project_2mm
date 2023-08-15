@@ -160,7 +160,7 @@ const GroupDetail = () => {
   const gotoAddMember = () => {
     // 멤버 추가하기 페이지로 이동 (임시)
     // 여기로 이동하고 끝이 맞나? 아님 추가 페이지를 하나 더 만들어야 됨?
-    navigate("/Signup4_new");
+    navigate("/AddFamily");
   };
 
   // 그룹 상세 정보 불러오기 추가

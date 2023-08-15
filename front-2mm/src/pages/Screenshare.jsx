@@ -4,16 +4,17 @@ import styled from "styled-components";
 
 const Container = styled.div`
   position: relative;
-  margin: 30px auto;
+  margin: 30px 0;
   max-width: 375px;
   height: 740px;
   background: white;
   border: 1px solid gray;
+  margin: 30px auto;
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -47,9 +48,9 @@ const CopyBox = styled.div`
   position: relative;
   margin-top: 20px;
   display: flex;
-  max-width: 334px;
+  max-width: 115px;
   max-height: 90px;
-  padding: 19px 202px 49px 22px;
+  padding: 19px 202px 49px 5px;
   align-items: center;
   flex-shrink: 0;
   border-radius: 6px;
@@ -117,7 +118,9 @@ const Screenshare = () => {
           <img src={`${process.env.PUBLIC_URL}/images/explainscr.svg`} />
         </SubTitle>
         {/* url 받아오기!!!! get으로... */}
-        <CopyBox ref={copyBoxRef}>주소가 뜰 것</CopyBox>
+        <CopyBox ref={copyBoxRef}>
+          https://us2mmweb/j/87528929085?pwd=yGaa9wUnpHu4Q8GIGlGRal8mYf7rkc.1
+        </CopyBox>
         <CopyBtn onClick={handleCopyClick}>
           <img src={`${process.env.PUBLIC_URL}/images/copybtn.svg`} />
         </CopyBtn>

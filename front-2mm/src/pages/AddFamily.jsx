@@ -79,7 +79,7 @@ const CopyAlert = styled.div`
   color: gray; /* 복사됨 텍스트의 색상 */
 `;
 
-const Signup4_new = () => {
+const AddFamily = () => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const copyBoxRef = useRef(null);
@@ -90,7 +90,7 @@ const Signup4_new = () => {
   // };
 
   const handleNextClick = () => {
-    navigate("/signup5_new"); // Use navigate to transition to another page
+    navigate("/Home"); // Use navigate to transition to another page
   };
 
   const handleCopyClick = () => {
@@ -130,4 +130,4 @@ const Signup4_new = () => {
   );
 };
 
-export default Signup4_new;
+export default AddFamily;

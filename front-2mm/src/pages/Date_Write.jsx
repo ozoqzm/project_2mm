@@ -37,7 +37,7 @@ const SubTitle = styled.div`
   left: 25px;
 `;
 
-const InputDate = styled.input`
+const InputDate = styled.textarea`
   position: relative;
   width: 300px;
   height: 108px;
@@ -47,7 +47,7 @@ const InputDate = styled.input`
   border: 1.5px solid #0085ff;
   font-size: 20px;
   padding-left: 15px;
-
+  resize: none;
   ::placeholder {
     color: #7c7c7c;
   }
@@ -59,7 +59,7 @@ const SubTitle2 = styled.div`
   left: 25px;
 `;
 
-const InputDate2 = styled.input`
+const InputDate2 = styled.textarea`
   position: relative;
   width: 300px;
   height: 108px;
@@ -69,6 +69,7 @@ const InputDate2 = styled.input`
   border: 1.5px solid #0085ff;
   font-size: 20px;
   padding-left: 15px;
+  resize: none;
 
   ::placeholder {
     color: #7c7c7c;

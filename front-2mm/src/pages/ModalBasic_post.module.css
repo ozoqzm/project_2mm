@@ -4,7 +4,7 @@
   height: 190px;
   position: fixed; /* 변경된 부분 */
   z-index: 5;
-  top: 74.25%; /* 모달을 수직 가운데에 위치시키기 위해 변경 */
+  top: 671px; /* 모달을 수직 가운데에 위치시키기 위해 변경 */
   left: 49.98%;
   transform: translate(-50%, -50%);
 
