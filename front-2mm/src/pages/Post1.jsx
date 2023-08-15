@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ModalBasic_post from "./ModalBasic_post";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
   margin: 30px 0;
-  max-width: 375px;
+  width: 375px;
   height: 740px;
   background: white;
   border: 1px solid gray;
@@ -127,8 +128,55 @@ const WriteBtn = styled.div`
 
 const Post1 = () => {
   const navigate = useNavigate();
-  const [isLiked, setIsLiked] = useState(false);
+  const [posts, setPosts] = useState([]);
+
+  const [selectedPostId, setSelectedPostId] = useState(null); // 선택된 게시글의 ID를 저장하는 상태 추가
   const [modalOpen, setModalOpen] = useState(false);
+
+  // get
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const code = localStorage.getItem("code");
+        const response = await axios.get(
+          `http://127.0.0.1:8000/group/${code}/posts/`
+        );
+
+        console.log("Received data from API:", response.data);
+
+        const postsWithLike = response.data.map((post) => ({
+          ...post,
+          isLiked: false,
+        }));
+
+        setPosts(postsWithLike);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // delete부분
+  const onDeleteButtonClick = (postId) => {
+    setSelectedPostId(postId); // 삭제할 게시글의 ID 저장
+    setModalOpen(true); // 모달 열기
+  };
+
+  const onUpdateButtonClick = (postId) => {
+    setSelectedPostId(postId);
+    navigate(`/Post4/${selectedPostId}`); // 수정할 게시글의 ID를 URL에 포함하여 이동
+  };
+
+  const onClickHeart = (postId) => {
+    // postId와 일치하는 게시글을 찾아서 좋아요 상태를 토글
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, isLiked: !post.isLiked } : post
+      )
+    );
+    // 필요한 API 호출이나 상태 업데이트 등을 수행 (게시글의 좋아요 처리)
+  };
 
   const onClickBack = () => {
     navigate("/GroupHome");
@@ -138,13 +186,15 @@ const Post1 = () => {
     navigate("/Post2");
   };
 
-  const onClickComment = () => {
-    navigate("/Post3");
+  const onClickComment = (postId) => {
+    navigate(`/Post3/${postId}`); // 해당 게시글의 ID를 URL에 포함하여 이동
   };
 
-  const onClickHeart = () => {
-    setIsLiked((prevIsLiked) => !prevIsLiked);
-  };
+  console.log(posts.length);
+
+  // if (posts.length === 0) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <Container>
@@ -152,142 +202,63 @@ const Post1 = () => {
         <img src={`${process.env.PUBLIC_URL}/images/back_btn.svg`} alt="back" />
       </Back>
       <ScrollBox>
-        <PostBox>
-          <Profile>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/imgupload_post1.svg`}
-              alt="Profile"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </Profile>
-          <Name>김서진</Name>
-          <Date>7시간전</Date>
-          <More onClick={() => setModalOpen(true)}>
-            <img src={`${process.env.PUBLIC_URL}/images/more.svg`} alt="more" />
-          </More>
-          {modalOpen && (
-            <>
-              <div
-                className="modal-overlay"
-                onClick={() => setModalOpen(false)}
+        {posts.map((post) => (
+          <PostBox key={post.id}>
+            <Profile>
+              <img
+                src={`http://127.0.0.1:8000${post.writerProfile}`}
+                alt="PostImg"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
+            </Profile>
+            <Name>{post.writer}</Name> {/* 작성자 표시 */}
+            <Date>{post.createdAt}</Date>
+            <More onClick={() => onUpdateButtonClick(post.id)}>
+              {" "}
+              {/* 수정 버튼 */}
+              <img
+                src={`${process.env.PUBLIC_URL}/images/more.svg`}
+                alt="more"
+              />
+            </More>
+            {modalOpen && (
               <ModalBasic_post
                 setModalOpen={setModalOpen}
-                closeModal={() => setModalOpen(false)}
+                postId={selectedPostId}
+                setPosts={setPosts}
+                post={post} // Pass the entire post object
               />
-            </>
-          )}
-          <PostDetail>푸바오 실물 폼 미쳤다!!</PostDetail>
-          <PostImg>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/pubao.jpg`}
-              alt="PostImg"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </PostImg>
-          <Heart onClick={onClickHeart}>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/${
-                isLiked ? "heart.svg" : "empty_heart.svg"
-              }`}
-              alt={isLiked ? "heart" : "empty_heart"}
-            />
-          </Heart>
-          <Comment onClick={onClickComment}>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/comment.svg`}
-              alt="comment"
-            />
-          </Comment>
-          <DivisionBar>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/division.svg`}
-              alt="comment"
-            />
-          </DivisionBar>
-        </PostBox>
-
-        <PostBox>
-          <Profile>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/imgupload_post1.svg`}
-              alt="Profile"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </Profile>
-          <Name>김서진</Name>
-          <Date>7시간전</Date>
-          <More>
-            <img src={`${process.env.PUBLIC_URL}/images/more.svg`} alt="more" />
-          </More>
-          <PostDetail>푸바오 실물 폼 미쳤다!!</PostDetail>
-          <PostImg>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/pubao.jpg`}
-              alt="PostImg"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </PostImg>
-          <Heart>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/empty_heart.svg`}
-              alt="empty_heart"
-            />
-          </Heart>
-          <Comment>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/comment.svg`}
-              alt="comment"
-            />
-          </Comment>
-          <DivisionBar>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/division.svg`}
-              alt="comment"
-            />
-          </DivisionBar>
-        </PostBox>
-
-        <PostBox>
-          <Profile>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/imgupload_post1.svg`}
-              alt="Profile"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </Profile>
-          <Name>김서진</Name>
-          <Date>7시간전</Date>
-          <More>
-            <img src={`${process.env.PUBLIC_URL}/images/more.svg`} alt="more" />
-          </More>
-          <PostDetail>푸바오 실물 폼 미쳤다!!</PostDetail>
-          <PostImg>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/pubao.jpg`}
-              alt="PostImg"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </PostImg>
-          <Heart>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/empty_heart.svg`}
-              alt="empty_heart"
-            />
-          </Heart>
-          <Comment>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/comment.svg`}
-              alt="comment"
-            />
-          </Comment>
-          <DivisionBar>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/division.svg`}
-              alt="comment"
-            />
-          </DivisionBar>
-        </PostBox>
+            )}
+            <PostDetail>{post.content}</PostDetail> {/* 내용 표시 */}
+            <PostImg>
+              <img
+                src={`http://127.0.0.1:8000${post.image}`}
+                alt="PostImg"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </PostImg>
+            <Heart onClick={() => onClickHeart(post.id)}>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/${
+                  post.isLiked ? "heart.svg" : "empty_heart.svg"
+                }`}
+                alt={post.isLiked ? "heart" : "empty_heart"}
+              />
+            </Heart>
+            <Comment onClick={() => onClickComment(post.id)}>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/comment.svg`}
+                alt="comment"
+              />
+            </Comment>
+            <DivisionBar>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/division.svg`}
+                alt="comment"
+              />
+            </DivisionBar>
+          </PostBox>
+        ))}
       </ScrollBox>
       <WriteBtn onClick={onClickBtn}>
         <img

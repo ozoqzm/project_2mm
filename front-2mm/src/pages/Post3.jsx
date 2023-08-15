@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
   position: relative;
@@ -34,6 +36,11 @@ const ScrollBox = styled.div`
   height: 549px;
   overflow-y: auto;
   overflow-x: hidden;
+  &::-webkit-scrollbar {
+    /* WebKit 브라우저의 스크롤바를 숨김 */
+    width: 0;
+    background: transparent;
+  }
 `;
 
 const CommentBox = styled.div`
@@ -131,6 +138,9 @@ const DivisionBar = styled.div`
 
 const Post3 = () => {
   const navigate = useNavigate();
+  const { postId } = useParams();
+  const [comments, setComments] = useState([]); // 댓글 상태 변경
+
   const [recognizedText, setRecognizedText] = useState(""); // 음성으로 변환된 텍스트 상태
   const [isRecognizing, setIsRecognizing] = useState(false); // 음성 인식 중 여부 상태
   const [message, setMessage] = useState(""); // 메시지 상태
@@ -139,10 +149,6 @@ const Post3 = () => {
   // back_btn 이동
   const onClickBack = () => {
     navigate("/Post1");
-  };
-
-  const onClickPost = () => {
-    navigate("/Post3");
   };
 
   // 음성 인식 코드
@@ -194,8 +200,87 @@ const Post3 = () => {
   };
 
   const handleVoiceBtnClick = () => {
-    handleSpeechToText();
+    if ("webkitSpeechRecognition" in window) {
+      handleSpeechToText();
+    } else {
+      console.log("음성인식을 지원하지 않는 브라우저입니다.");
+      setMessage("음성인식을 지원하지 않는 브라우저입니다.");
+    }
   };
+
+  //post부분
+  const onSubmit = async () => {
+    try {
+      console.log("Sending data:", recognizedText);
+
+      const token = localStorage.getItem("token");
+      const code = localStorage.getItem("code");
+
+      const response = await axios
+        .post(
+          `http://127.0.0.1:8000/group/${code}/posts/${postId}/comments/`,
+          {
+            post: postId, // 포스트 ID를 포함시킵니다.
+            comment: recognizedText, // 댓글 내용을 포함시킵니다.
+          },
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(() => window.location.reload());
+
+      console.log("Response data:", response.data);
+
+      setRecognizedText("");
+    } catch (error) {
+      console.error("Error creating new post:", error);
+      if (error.response) {
+        console.log("Server response data:", error.response.data);
+      }
+    }
+  };
+
+  // get부분
+  const [group, setGroup] = useState(null);
+
+  useEffect(() => {
+    const code = localStorage.getItem("code");
+    const token = localStorage.getItem("token");
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/group/${code}/posts/${postId}/comments/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Get Received data from API:", response.data);
+
+        // 댓글 정보와 포스트 정보 추출
+        const commentsData = response.data;
+        console.log("Sample Comment Data:", commentsData[0]); // 댓글 데이터의 예시 출력
+
+        // 댓글 정보와 포스트 정보 설정
+        setComments(commentsData);
+        setGroup("dummy_group"); // 임의의 그룹 정보를 설정 (실제로 사용할 그룹 정보로 대체)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [postId]);
+
+  if (!group) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container>
@@ -210,43 +295,27 @@ const Post3 = () => {
       </Title>
       <ScrollBox>
         <CommentBox>
-          <Profile>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/imgupload_post1.svg`}
-              alt="Profile"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </Profile>
-          <Name>김서진</Name>
-          <CommentDetail>우왓 너무 귀여워요:D</CommentDetail>
-          <Date>7시간전</Date>
-          <DivisionBar>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/division.svg`}
-              alt="comment"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </DivisionBar>
-        </CommentBox>
-
-        <CommentBox>
-          <Profile>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/imgupload_post1.svg`}
-              alt="Profile"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // 이미지 크기와 픽셀 사용 방식 설정
-            />
-          </Profile>
-          <Name>김서진</Name>
-          <CommentDetail>우왓 너무 귀여워요:D</CommentDetail>
-          <Date>7시간전</Date>
-          <DivisionBar>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/division.svg`}
-              alt="comment"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </DivisionBar>
+          {comments.map((comment) => (
+            <div key={comment.id}>
+              <Profile>
+                <img
+                  src={`http://127.0.0.1:8000${comment.writerProfile}`}
+                  alt="Profile"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </Profile>
+              <Name>{comment.writer}</Name>
+              <CommentDetail>{comment.comment}</CommentDetail>
+              <Date>{comment.createdAt}</Date>
+              <DivisionBar>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/division.svg`}
+                  alt="comment"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </DivisionBar>
+            </div>
+          ))}
         </CommentBox>
       </ScrollBox>
       <VoiceBtn onClick={handleVoiceBtnClick}>
@@ -259,10 +328,10 @@ const Post3 = () => {
       <ChatBox>
         <Chat
           placeholder="댓글을 입력하세요."
-          value={recognizedText} // 음성으로 변환된 텍스트를 input 값으로 설정
-          onChange={(event) => setRecognizedText(event.target.value)} // input 값이 변경될 때마다 상태 업데이트
-        ></Chat>
-        <PostBtn onClick={onClickPost}>
+          value={recognizedText}
+          onChange={(event) => setRecognizedText(event.target.value)}
+        />
+        <PostBtn onClick={onSubmit}>
           <img
             src={`${process.env.PUBLIC_URL}/images/comment_btn.svg`}
             alt="comment_btn"

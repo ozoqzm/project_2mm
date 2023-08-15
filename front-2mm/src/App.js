@@ -30,6 +30,7 @@ import Date_Detail from "./pages/Date_Detail";
 import Date_Plus from "./pages/Date_Plus";
 import Date_Write from "./pages/Date_Write";
 import AlbumDetail from "./pages/AlbumDetail";
+import Post4 from "./pages/Post4";
 
 function App() {
   return (
@@ -67,6 +68,8 @@ function App() {
           <Route path="/Date_Plus" element={<Date_Plus />} />{" "}
           <Route path="/Date_Write" element={<Date_Write />} />{" "}
           <Route path="/AlbumDetail/:postID" element={<AlbumDetail />} />{" "}
+          <Route path="/Post3/:postId" element={<Post3 />} />
+          <Route path="/Post4/:postId/:groupCode" element={<Post4 />} />
         </Routes>
       </div>
     </BrowserRouter>
