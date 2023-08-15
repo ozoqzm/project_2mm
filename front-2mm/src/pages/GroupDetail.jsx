@@ -166,6 +166,7 @@ const GroupDetail = () => {
   // 그룹 상세 정보 불러오기 추가
   const [group, setGroup] = useState(null);
   const [users, setUsers] = useState([]); // 추가
+  const [user, setUser] = useState([]); // 추가
   const [postLoading, setPostLoading] = useState(true);
 
   // 전에 페이지에서 그룹 코드 받아오기
@@ -185,13 +186,14 @@ const GroupDetail = () => {
         );
         setGroup(response.data);
         setUsers(response.data.user); // users배열에 저장 추가
+        console.log("유저 아이디: " + users);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
       setPostLoading(false); // 로딩 상태 변경
     };
     fetchData(); // fetchData 함수 호출 (데이터를 서버에서 가져옴)
-  }, []); // invitecode가 변경될 때마다 데이터를 다시 불러오도록
+  }, [code]); // invitecode가 변경될 때마다 데이터를 다시 불러오도록
 
   if (postLoading) {
     return <div>대기중...</div>;
@@ -252,6 +254,7 @@ const GroupDetail = () => {
             <NameText>{userObj.username}</NameText>
           </Box>
         ))}
+        {/* 추가 페이지로 이동하는 박스 */}
         <Box onClick={gotoAddMember}>
           <ProfileImg>
             <img

@@ -176,31 +176,35 @@ const Signup2_old = () => {
 
   // 다시 보기!!!
   // 저장 버튼 누를 시 사용자가 모임에 추가 되어야함
-  // const onSubmit = async () => {
-  //   try {
-  //     //const token = localStorage.getItem("token");
+  const onSubmit = async () => {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Token ${token}` };
+    try {
+      //const token = localStorage.getItem("token");
 
-  //     const response = await axios.patch(
-  //       `http://127.0.0.1:8000/group/${invitecode}/`
-  //     );
-  //     console.log("Data:", response.data);
+      const response = await axios.patch(
+        `http://127.0.0.1:8000/group/${invitecode}/`,
+        { code: invitecode },
+        { headers }
+      );
+      console.log("Data:", response.data);
 
-  //     navigate("/signup3_old");
-  //   } catch (error) {
-  //     console.error("Error creating new post:", error);
-  //   }
-  // };
-
-  const onSubmit = () => {
-    axios
-      .patch(`http://127.0.0.1:8000/group/${invitecode}/`)
-      .then((response) => {
-        console.log("Data updated:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error updating data:", error);
-      });
+      navigate("/signup3_old");
+    } catch (error) {
+      console.error("Error creating new post:", error);
+    }
   };
+
+  // const onSubmit = () => {
+  //   axios
+  //     .patch(`http://127.0.0.1:8000/group/${invitecode}/`)
+  //     .then((response) => {
+  //       console.log("Data updated:", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error updating data:", error);
+  //     });
+  // };
   return (
     <Container>
       <Back>
