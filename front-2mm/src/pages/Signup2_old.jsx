@@ -180,8 +180,6 @@ const Signup2_old = () => {
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Token ${token}` };
     try {
-      //const token = localStorage.getItem("token");
-
       const response = await axios.patch(
         `http://127.0.0.1:8000/group/${invitecode}/`,
         { code: invitecode },
@@ -195,16 +193,6 @@ const Signup2_old = () => {
     }
   };
 
-  // const onSubmit = () => {
-  //   axios
-  //     .patch(`http://127.0.0.1:8000/group/${invitecode}/`)
-  //     .then((response) => {
-  //       console.log("Data updated:", response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error updating data:", error);
-  //     });
-  // };
   return (
     <Container>
       <Back>

@@ -91,9 +91,17 @@ const Home = () => {
   };
   const logoutfunc = () => {
     // 로그아웃 부분 추가..
-    localStorage.removeItem("token");
-    // 로그아웃 시 로컬 스토리지에서 토큰 제거
-    navigate("/");
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Token ${token}` };
+    try {
+      axios.post(`http://127.0.0.1:8000/api/logout/`, {
+        headers,
+      });
+      localStorage.removeItem("token");
+      navigate("/"); // 로그인하면 페이지 이동
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
   };
   // 그룹 가져오는 부분
   const [postList, setPostList] = useState([]);
