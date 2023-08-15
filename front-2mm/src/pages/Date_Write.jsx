@@ -14,8 +14,8 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -87,7 +87,15 @@ const Date_Write = () => {
   const [newTitle, setNewTitle] = useState(""); // 추가
   const [newMemo, setNewMemo] = useState(""); // 추가
 
+  const gotoBack = () => {
+    navigate("/Schedule1");
+  };
   const onClick = () => {
+    if (!newTitle || !newMemo) {
+      alert("모든 칸을 입력해주세요.");
+      return;
+    }
+
     const code = localStorage.getItem("code");
     const recognizedText = localStorage.getItem("recognizedText");
     const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져옴
@@ -119,7 +127,7 @@ const Date_Write = () => {
 
   return (
     <Container>
-      <Back>
+      <Back onClick={gotoBack}>
         <img src={`${process.env.PUBLIC_URL}/images/backbtn.svg`} />
       </Back>
       <Title>

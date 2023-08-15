@@ -14,8 +14,8 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -35,6 +35,12 @@ const SubTitle = styled.div`
   position: relative;
   left: 20px;
   top: 15px;
+  color: #282828;
+  font-family: SUIT;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 141.5%; /* 33.96px */
 `;
 
 const VoiceBtn = styled.div`
@@ -67,7 +73,7 @@ const InputText = styled.input`
 
 const NextBtn = styled.div`
   position: relative;
-  top: 310px;
+  top: 300px;
   left: 20px;
 `;
 
@@ -80,6 +86,10 @@ const Schedule1 = () => {
 
   // 다음으로 버튼 눌렀을 경우
   const onClickPost = () => {
+    if (!recognizedText) {
+      alert("모든 칸을 입력해주세요.");
+      return;
+    }
     // 로컬스토리지에 음성인식값 저장
     localStorage.setItem("recognizedText", recognizedText);
     navigate(`/Date_Write`);
@@ -131,10 +141,8 @@ const Schedule1 = () => {
         />
       </Title>
       <SubTitle>
-        <img
-          src={`${process.env.PUBLIC_URL}/images/schedule1_subtitle.svg`}
-          alt="title"
-        />
+        일정의 날짜가 어떻게 되나요? <br />
+        (예: 7월 5일)
       </SubTitle>
       <VoiceBtn onClick={handleVoiceBtnClick}>
         <img

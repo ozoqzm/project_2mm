@@ -39,7 +39,7 @@ const Detail = styled.div`
   left: 25px;
 `;
 
-const CopyBox = styled.input`
+const CopyBox = styled.div`
   position: relative;
   width: 300px;
   height: 50px;
@@ -62,9 +62,9 @@ const CopyBtn = styled.div`
 `;
 
 const NextBtn = styled.button`
-  position: relative;
-  top: 280px;
-  left: 20px;
+  position: absolute;
+  bottom: 40px;
+  left: 30px;
   background: transparent;
   border: none;
 `;
@@ -80,10 +80,11 @@ const Signup4_new = () => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const copyBoxRef = useRef(null);
+  const inviteCode = localStorage.getItem("code");
 
-  const handleBackClick = () => {
-    navigate("/signup3_new"); // Go back to the previous page
-  };
+  // const handleBackClick = () => {
+  //   navigate("/signup3_new"); // Go back to the previous page
+  // };
 
   const handleNextClick = () => {
     navigate("/signup5_new"); // Use navigate to transition to another page
@@ -113,14 +114,13 @@ const Signup4_new = () => {
       <SubTitle>
         <img src={`${process.env.PUBLIC_URL}/images/subtitle_invite2.svg`} />
       </SubTitle>
-      <CopyBox>{localStorage.getItem("code")}</CopyBox>
+      <CopyBox ref={copyBoxRef}>{inviteCode}</CopyBox>
       <CopyBtn onClick={handleCopyClick}>
         <img src={`${process.env.PUBLIC_URL}/images/copybtn.svg`} />
       </CopyBtn>
+      {/* 복사 상태에 따라 텍스트를 표시하는 요소 */}
       <CopyAlert>{copied ? "주소가 복사되었습니다" : " "} </CopyAlert>
       <NextBtn onClick={handleNextClick}>
-        {" "}
-        {/* Call handleNextClick */}
         <img src={`${process.env.PUBLIC_URL}/images/nextbtn.svg`} />
       </NextBtn>
     </Container>

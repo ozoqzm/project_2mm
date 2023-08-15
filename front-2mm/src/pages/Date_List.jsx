@@ -32,8 +32,8 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -220,6 +220,8 @@ const PlanItem = ({ planID }) => {
               onClick={() => setModalOpen(false)}
             />
             <ModalBasic
+              key={planID}
+              planID={planID}
               setModalOpen={setModalOpen}
               closeModal={() => setModalOpen(false)}
             />
@@ -264,7 +266,7 @@ const Date_List = () => {
       setLoading(false); // 로딩 상태 변경
     };
     fetchData(); // useEffect에서 fetchData 함수 호출
-  }, []);
+  }, [code]);
 
   if (loading) {
     return <div>대기중...</div>;
