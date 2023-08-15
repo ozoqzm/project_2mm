@@ -229,11 +229,6 @@ class GroupListCreateView(generics.CreateAPIView):
         
         group = serializer.save()
         group.code = uuid.uuid4()
-        #group.save()
-        
-
-        profile_image = self.request.data.get('profile_image', None)
-        group.profile = profile_image
         group.save()
         group.user.add(userinfo)
     def get(self, request):
