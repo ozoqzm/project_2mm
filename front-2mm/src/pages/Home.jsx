@@ -91,6 +91,8 @@ const Home = () => {
   };
   const logoutfunc = () => {
     // 로그아웃 부분 추가..
+    localStorage.removeItem("token");
+    // 로그아웃 시 로컬 스토리지에서 토큰 제거
     navigate("/");
   };
   // 그룹 가져오는 부분

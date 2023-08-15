@@ -134,6 +134,10 @@ const GroupHome = () => {
   const gotoPlan = () => {
     navigate("/Date_List");
   };
+  // 홈으로
+  const gotoHome = () => {
+    navigate("/Home");
+  };
   return (
     <Container>
       <StickyBox>
@@ -142,7 +146,7 @@ const GroupHome = () => {
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
             src={`${process.env.PUBLIC_URL}/images/bluepoint.svg`}
           />
-          <Mark>
+          <Mark onClick={gotoHome}>
             <img src={`${process.env.PUBLIC_URL}/images/heartmark.svg`} />
           </Mark>
           <GroupTitle>화목한 우리 가족</GroupTitle>

@@ -219,10 +219,12 @@ const Signup2_old = () => {
         />
         {/* 여기에 모임 이미지 떠야 함 */}
         <ImageUpload>
-          <img
-            style={{ width: "300px", height: "242px" }}
-            src={`http://127.0.0.1:8000${group.profile}`}
-          />
+          {group && group.profile && (
+            <img
+              style={{ width: "300px", height: "242px" }}
+              src={`http://127.0.0.1:8000${group.profile}`}
+            />
+          )}
         </ImageUpload>
         <GroupName>{group && group.name}</GroupName>
         <GroupDetail>{group && group.info}</GroupDetail>
