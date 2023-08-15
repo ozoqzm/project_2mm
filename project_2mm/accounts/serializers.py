@@ -12,8 +12,12 @@ class UsernameSerializer(serializers.Serializer):
         # 코드 값을 무시하고 업데이트할 필드만 validated_data에서 추출합니다.
         validated_data.pop('username', None)
         return super().update(instance, validated_data)
-    
 
+class UserInfoSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+    class Meta:
+        model = models.UserInfo
+        fields = ['id', 'username', 'profile']
 
 class UsersSerializer(serializers.ModelSerializer):
     #user = serializers.ReadOnlyField(source='user.username')
@@ -50,25 +54,22 @@ class GroupCreateSerializer(serializers.ModelSerializer):
         fields = ['name', 'code']  # 코드 필드도 포함
 
 class GroupSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username') 
+    user = UserInfoSerializer(many=True, source='user.all') 
     class Meta:
         model = models.Group
-        fields = ['name', 'info', 'profile', 'username', 'code']
+        fields = ['name', 'info', 'profile', 'user', 'code']
 
     def update(self, instance, validated_data):
         # 코드 값을 무시하고 업데이트할 필드만 validated_data에서 추출하는 메소드
         validated_data.pop('code', None)
         return super().update(instance, validated_data)
-
-class UserInfoSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username')
-    class Meta:
-        model = models.UserInfo
-        fields = ['id', 'username', 'profile']
-
 class GroupDetailSerializer(serializers.ModelSerializer):
-    user = UserInfoSerializer(many=True, source='user.all')
     class Meta:
         model = models.Group
-        fields = '__all__'
-        read_only_fields = ['code', 'name', 'profile']
+        fields = ['name', 'info', 'profile', 'code', 'user']  # user 필드를 포함하지 않음
+# class GroupDetailSerializer(serializers.ModelSerializer):
+#     user = UserInfoSerializer(many=True, source='user.all')
+#     class Meta:
+#         model = models.Group
+#         fields = '__all__'
+#         read_only_fields = ['code', 'name', 'profile']
