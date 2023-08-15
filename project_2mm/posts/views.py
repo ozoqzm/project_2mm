@@ -51,7 +51,7 @@ class GroupPostView(views.APIView):
     def get(self, request, group_code):
         try:
             group = models.Group.objects.get(code=group_code)
-            posts = Post.objects.filter(group_code=group)
+            posts = Post.objects.filter(group_code=group).order_by('-created_at')
             serializer = serializers.GroupPostSerializer(posts, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
