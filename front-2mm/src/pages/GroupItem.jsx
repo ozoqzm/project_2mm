@@ -88,19 +88,21 @@ const GroupItem = ({ code }) => {
 
   return (
     <>
-      <Box onClick={goGroupHome}>
-        <img
-          style={{
-            display: "block",
-            margin: "auto",
-            width: "346px",
-            height: "175px",
-            borderRadius: "17.76px",
-            filter: "brightness(60%)",
-          }}
-          src={`http://127.0.0.1:8000${group.profile}`}
-        />
-      </Box>
+      {group && (
+        <Box onClick={goGroupHome}>
+          <img
+            style={{
+              display: "block",
+              margin: "auto",
+              width: "346px",
+              height: "175px",
+              borderRadius: "17.76px",
+              filter: "brightness(60%)",
+            }}
+            src={`http://127.0.0.1:8000${group.profile}`}
+          />
+        </Box>
+      )}
       <SettingBtn onClick={goGroupDetail}></SettingBtn>
       <GroupTitle>{group && group.name}</GroupTitle>
       <Personnel>인원 {userCount}명</Personnel>

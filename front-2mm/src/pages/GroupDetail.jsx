@@ -171,7 +171,6 @@ const GroupDetail = () => {
 
   // 전에 페이지에서 그룹 코드 받아오기
   const location = useLocation();
-
   // 이전 페이지에서 전달된 초대코드
   const { code } = location.state; // code 무조건 {}로 묶어야함!!
   console.log(code);
@@ -216,7 +215,7 @@ const GroupDetail = () => {
           console.log(error);
         });
 
-      navigate("/Home"); // t삭제버튼 누르면 홈으로
+      navigate("/Home"); // 삭제버튼 누르면 홈으로
     } catch (error) {
       console.error("Error delete:", error);
     }

@@ -91,7 +91,7 @@ const Signup5_new = () => {
       }
     };
     fetchData(); // fetchData 함수 호출 (데이터를 서버에서 가져옴)
-  }, []); // invitecode가 변경될 때마다 데이터를 다시 불러오도록
+  }, []);
 
   const navigate = useNavigate();
   const handleClick = () => {

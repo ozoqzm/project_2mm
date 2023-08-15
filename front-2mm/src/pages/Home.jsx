@@ -140,7 +140,7 @@ const Home = () => {
         {/* 사용자의 그룹 전체 리스트들 위에 불러오고.. 여기다간 GroupItem반복문 써서 돌리기
         -> 돌릴 때 props로 그룹 코드 전달 해야함 */}
         {postList.map((e) => (
-          <GroupItem code={e.code} />
+          <GroupItem key={e.code} code={e.code} />
         ))}
         <AddBox onClick={gotoAdd}>
           <img
