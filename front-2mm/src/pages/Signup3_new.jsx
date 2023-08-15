@@ -52,8 +52,8 @@ const InputDetail = styled.input`
 
 const NextBtn = styled.button`
   position: relative;
-  top: 330px;
-  left: 22px;
+  top: 340px;
+  left: 16px;
   background: transparent;
   border: none;
   cursor: pointer;

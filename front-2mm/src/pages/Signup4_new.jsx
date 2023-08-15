@@ -63,8 +63,8 @@ const CopyBtn = styled.div`
 
 const NextBtn = styled.button`
   position: absolute;
-  bottom: 40px;
-  left: 30px;
+  bottom: 50px;
+  left: 32px;
   background: transparent;
   border: none;
 `;

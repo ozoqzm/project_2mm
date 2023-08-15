@@ -41,25 +41,40 @@ const Whitebox = styled.div`
 
 const ImageUpload = styled.div`
   position: relative;
-  width: 450px;
+  width: 320px;
   height: 242px;
   bottom: 345px;
   left: 25px;
   flex-shrink: 0;
   border-radius: 16px;
+  background: pink;
 `;
 
 const GroupName = styled.div`
   position: relative;
-  width: 127px;
+  width: 270px;
   height: 22px;
   left: 41px;
-  top: -250px;
+  top: -330px;
 
   font-family: "Inter";
   font-style: normal;
-  font-weight: 100;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  color: #181818;
+`;
+const GroupInfo = styled.div`
+  position: relative;
+  width: 127px;
+  height: 22px;
+  left: 41px;
+  top: -323px;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
   line-height: 22px;
   color: #181818;
 `;
@@ -123,6 +138,7 @@ const Signup5_new = () => {
           ) : null}
         </ImageUpload>
         {group ? <GroupName>{group.name}</GroupName> : null}
+        {group ? <GroupInfo>{group.info}</GroupInfo> : null}
       </Whitebox>
       <NextBtn onClick={handleClick}>
         <img src={`${process.env.PUBLIC_URL}/images/startbtn.svg`} alt="Next" />

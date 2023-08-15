@@ -53,8 +53,8 @@ const ImageUploadImage = styled.img`
 
 const NextBtn = styled.button`
   position: relative;
-  top: 250px;
-  left: 22px;
+  top: 265px;
+  left: 16px;
   background: transparent;
   border: none;
   cursor: pointer;

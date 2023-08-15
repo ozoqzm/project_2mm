@@ -50,7 +50,7 @@ const InputGroupname = styled.input`
 const NextBtn = styled.button`
   position: relative;
   top: 470px;
-  left: 22px;
+  left: 17px;
   background: transparent;
   border: none;
   cursor: pointer;
