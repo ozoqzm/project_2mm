@@ -1,55 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./ModalBasic_date.module.css";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 const BACKEND_URL =
   "https://uuju.pythonanywhere.com" || "http://127.0.0.1:8000";
 
 function ModalBasic({ setModalOpen, planID }) {
-  const [plan, setPlan] = useState(null); // plan 상태 선언
+  const [plan, setPlan] = useState(null);
   const navigate = useNavigate();
-  // 모달 닫기
+
   const closeModal = () => {
     setModalOpen(false);
   };
 
-  // 모달 밖을 클릭할 때 모달 닫기
   const handleOverlayClick = () => {
     closeModal();
   };
 
-  // 모달 내부를 클릭해도 모달이 닫히지 않도록 처리
   const handleModalClick = (e) => {
     e.stopPropagation();
   };
 
-  const deletePlan = () => {
+  const deletePlan = async () => {
     try {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Token ${token}` };
       const code = localStorage.getItem("code");
-      // 이전 페이지에서 전달받은 코드를 불러와야 함. 그래야 클릭한 모임이 삭제됨 로컬스토리지에서 불러오지x
-      axios
-        .delete(`${BACKEND_URL}/group/${code}/plans/${planID}`, {
-          headers,
-        })
-        .then((res) => {
-          console.log(res);
-          setPlan(plan.filter((e) => plan.code !== e.code)); // texts 배열 업데이트해서 해당 text.id와 일치하지 않는 데이터만 남도록 필터링
-        })
-        .catch((error) => {
-          console.log(error);
-          setModalOpen(false);
-          // 페이지 새로고침
-          window.location.reload();
-        });
+
+      // 삭제 요청 보내고 응답 처리
+      const response = await axios.delete(
+        `${BACKEND_URL}/group/${code}/plans/${planID}`,
+        { headers }
+      );
+
+      if (response.status === 204) {
+        // 삭제된 항목을 제외한 나머지를 업데이트
+        setPlan((prevPlan) => prevPlan.filter((e) => e.code !== planID));
+
+        setModalOpen(false);
+        window.location.reload(); // 페이지 새로고침
+      } else {
+        console.error(
+          "Failed to delete plan. Response status:",
+          response.status
+        );
+      }
     } catch (error) {
-      console.error("Error delete:", error);
+      console.error("Error deleting plan:", error);
     }
-    setModalOpen(false);
-    navigate("/Date_List");
   };
 
   return (
@@ -65,7 +65,7 @@ function ModalBasic({ setModalOpen, planID }) {
           className={styles.cancel}
           src={`${BACKEND_URL}/images/cancel (2).svg`}
           alt="cancel"
-          onClick={closeModal} // 모달 닫기
+          onClick={closeModal}
         />
       </div>
     </div>
