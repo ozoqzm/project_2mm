@@ -20,17 +20,27 @@ const Container = styled.div`
     padding-right: 0rem;
   }
 `;
-
-const TextBox2 = styled.div`
+const TextBox1 = styled.div`
   position: relative;
-  margin-top: 100px;
+  margin-top: 130px;
   margin-left: 15px;
-  color: #415de9;
+  color: #0057ff;
   font-family: Tmoney RoundWind;
   font-size: 22px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+`;
+const TextBox2 = styled.div`
+  position: relative;
+  margin-left: 15px;
+  color: #0057ff;
+  font-family: Tmoney RoundWind;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  z-index: 2;
 `;
 const CenterZone = styled.div`
   position: relative;
@@ -38,11 +48,11 @@ const CenterZone = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 490px;
+  margin-top: 437px;
 `;
 const DesignImg = styled.div`
   position: absolute;
-  bottom: 20px;
+  bottom: 60px;
 `;
 const LoginBtn = styled.div`
   position: relative;
@@ -60,10 +70,8 @@ const Passwd2 = () => {
 
   return (
     <Container>
-      <TextBox2>
-        모든 준비를 마치셨습니다. <br />
-        이제 로그인을 하러 가보실까요?
-      </TextBox2>
+      <TextBox1>모든 준비가 끝났습니다.</TextBox1>
+      <TextBox2>2mm를 시작해볼까요?</TextBox2>
       <DesignImg>
         <img
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -72,7 +80,7 @@ const Passwd2 = () => {
       </DesignImg>
       <CenterZone>
         <LoginBtn onClick={gotoLogin}>
-          <img src={`${BACKEND_URL}/images/loginbtn_s.svg`} />
+          <img src={`${BACKEND_URL}/images/startbtn.svg`} />
         </LoginBtn>
       </CenterZone>
     </Container>
