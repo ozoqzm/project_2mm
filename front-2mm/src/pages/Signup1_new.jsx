@@ -11,7 +11,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -97,9 +96,7 @@ const Signup1_new = () => {
 
   return (
     <Container>
-      <Back>
-        <img src={`${BACKEND_URL}/images/backbtn.svg`} />
-      </Back>
+      <Back>&nbsp;</Back>
       <SubTitle>
         <img src={`${BACKEND_URL}/images/subtitle_groupname.svg`} />
       </SubTitle>

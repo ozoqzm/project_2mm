@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import GroupItem from "./GroupItem";
+import axios from "axios";
 const BACKEND_URL =
   "https://uuju.pythonanywhere.com" || "http://127.0.0.1:8000";
 
@@ -12,7 +13,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: #f8f8f8;
-  border: 1px solid gray;
   margin: 30px auto;
   display: flex;
   flex-direction: column;
@@ -50,6 +50,8 @@ const GroupTitle = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  text-align: left;
+  left: -55px;
   z-index: 1;
 `;
 
@@ -140,6 +142,24 @@ const GroupHome = () => {
   const gotoHome = () => {
     navigate("/Home");
   };
+
+  const [group, setGroup] = useState(null);
+
+  useEffect(() => {
+    const code = localStorage.getItem("code");
+
+    const fetchData = async () => {
+      try {
+        // API 호출
+        const response = await axios.get(`${BACKEND_URL}/group/${code}/`);
+        setGroup(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData(); // fetchData 함수 호출 (데이터를 서버에서 가져옴)
+  }, []);
+
   return (
     <Container>
       <StickyBox>
@@ -151,7 +171,7 @@ const GroupHome = () => {
           <Mark onClick={gotoHome}>
             <img src={`${BACKEND_URL}/images/heartmark.svg`} />
           </Mark>
-          <GroupTitle>화목한 우리 가족</GroupTitle>
+          <GroupTitle>{group && group.name}</GroupTitle>
         </BluePoint>
       </StickyBox>
       <BoxZone>

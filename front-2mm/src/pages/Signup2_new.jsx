@@ -11,7 +11,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -91,6 +90,7 @@ const Signup2_new = () => {
 
       navigate("/Signup3_new");
     } catch (error) {
+      alert("그룹 이미지를 선택해주세요.");
       console.error("Error creating new post:", error);
     }
   };

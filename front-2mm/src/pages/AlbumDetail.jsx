@@ -14,7 +14,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
 
   @media screen and (max-width: 768px) {
     width: 100%;
@@ -55,6 +54,7 @@ const DownloadBtn = styled.button`
   height: 100px;
   background: none;
   border: none;
+  left: -5px;
 `;
 
 const AlbumDetail = () => {
@@ -128,7 +128,7 @@ const AlbumDetail = () => {
         </Box>
         {/* 다운로드 버튼 누르면 다운로드 정보 post로 넘겨줘야 함 */}
         <DownloadBtn onClick={onSubmit}>
-          <img src={`${BACKEND_URL}/images/downbtn.svg`} />
+          <img src={`${BACKEND_URL}/images/download.svg`} />
         </DownloadBtn>
       </BoxZone>
     </Container>

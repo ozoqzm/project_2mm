@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+
 const BACKEND_URL =
   "https://uuju.pythonanywhere.com" || "http://127.0.0.1:8000";
 
@@ -11,7 +12,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
 
   @media screen and (max-width: 768px) {
     width: 100%;
@@ -64,7 +64,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const gotoPasswd = () => {
-    navigate("/Passwd", { state: { phnumber } }); // 다음페이지로 입력한 값 전달
+    const modifiedPhnumber = phnumber.replace("010", "+8210"); // "010"을 "+8210"으로 변경
+    navigate("/Passwd", { state: { phnumber: modifiedPhnumber } }); // 변경된 전화번호로 다음 페이지로 이동
   };
 
   return (
@@ -79,7 +80,7 @@ const Login = () => {
       {/* 인풋 박스 */}
       <InputNumber
         type="text"
-        placeholder="+8210 뒤에 전화번호 8자리를 입력해주세요"
+        placeholder="전화번호를 입력해주세요"
         value={phnumber}
         onChange={(e) => setPhnumber(e.target.value)}
       ></InputNumber>

@@ -11,7 +11,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -71,9 +70,14 @@ const Membership2 = () => {
     try {
       const token = localStorage.getItem("token");
 
+      // 전화번호가 010으로 시작하는 경우 +8210으로 변환
+      const processedPhone = phone.startsWith("010")
+        ? `+8210${phone.substring(3)}`
+        : phone;
+
       const response = await axios.patch(
         `${BACKEND_URL}/signup/`,
-        { phone: phone },
+        { phone: processedPhone },
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -103,7 +107,7 @@ const Membership2 = () => {
         <img src={`${BACKEND_URL}/images/phone_text.svg`} alt="subtitle" />
       </SubTitle>
       <InputPhone
-        placeholder="+8210 뒤에 8자리 숫자 입력해주세요."
+        placeholder="전화번호를 입력해주세요"
         value={phone}
         onChange={handlePhoneChange}
       />

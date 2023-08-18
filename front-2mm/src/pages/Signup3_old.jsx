@@ -11,7 +11,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -122,9 +121,7 @@ const Signup3_old = () => {
 
   return (
     <Container>
-      <Back onClick={handleBackClick}>
-        <img src={`${BACKEND_URL}/images/backbtn.svg`} alt="Back" />
-      </Back>
+      <Back onClick={handleBackClick}>&nbsp;</Back>
       <SubTitle>
         <img src={`${BACKEND_URL}/images/subtitle_profile.svg`} />
       </SubTitle>

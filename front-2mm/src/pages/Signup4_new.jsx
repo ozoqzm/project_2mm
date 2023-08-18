@@ -11,7 +11,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -44,7 +43,7 @@ const Detail = styled.div`
 const CopyBox = styled.div`
   position: relative;
   width: 300px;
-  height: 35px;
+  height: 60px;
   left: 22px;
   top: 70px;
   border-radius: 7px;

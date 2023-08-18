@@ -10,7 +10,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   display: flex;
   flex-direction: column;
   justify-content: center;

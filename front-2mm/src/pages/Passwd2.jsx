@@ -12,7 +12,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
 
   @media screen and (max-width: 768px) {
     width: 100%;

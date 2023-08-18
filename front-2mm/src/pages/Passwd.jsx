@@ -12,7 +12,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
 
   @media screen and (max-width: 768px) {
     width: 100%;
@@ -99,7 +98,7 @@ const Passwd = () => {
       </SubTitle>
       <InputPasswd
         type="password"
-        placeholder="영어, 숫자 포함 8자리를 입력하세요."
+        placeholder="비밀번호를 입력해주세요"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       ></InputPasswd>

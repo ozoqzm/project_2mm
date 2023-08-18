@@ -12,7 +12,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -218,23 +217,27 @@ const Post3 = () => {
       const token = localStorage.getItem("token");
       const code = localStorage.getItem("code");
 
-      const response = await axios
-        .post(
-          `${BACKEND_URL}/group/${code}/posts/${postId}/comments/`,
-          {
-            post: postId, // 포스트 ID를 포함시킵니다.
-            comment: recognizedText, // 댓글 내용을 포함시킵니다.
+      const response = await axios.post(
+        `${BACKEND_URL}/group/${code}/posts/${postId}/comments/`,
+        {
+          post: postId,
+          comment: recognizedText,
+        },
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
           },
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then(() => window.location.reload());
+        }
+      );
 
       console.log("Response data:", response.data);
+
+      // 새로운 댓글을 기존 댓글 리스트에 추가
+      setComments([...comments, response.data]);
+
+      // 댓글 작성 완료 메시지 표시 (선택 사항)
+      setMessage("댓글 작성이 완료되었습니다.");
 
       setRecognizedText("");
     } catch (error) {

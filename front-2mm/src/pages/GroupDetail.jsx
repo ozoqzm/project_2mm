@@ -13,7 +13,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: #fff;
-  border: 1px solid gray;
   margin: 30px auto;
   display: flex;
   flex-direction: column;
@@ -200,24 +199,45 @@ const GroupDetail = () => {
 
   // 모임삭제하기 기능 추가
   const onSubmit = async () => {
-    try {
-      //const token = localStorage.getItem("token");
-      // const headers = { Authorization: `Token ${token}` };
-      //const code = localStorage.getItem("code"); // 이전 페이지에서 전달된 그룹코드
-      // 이전 페이지에서 전달받은 코드를 불러와야 함. 그래야 클릭한 모임이 삭제됨 로컬스토리지에서 불러오지x
-      axios
-        .delete(`${BACKEND_URL}/group/${code}/`)
-        .then((res) => {
-          console.log(res);
-          setGroup(group.filter((e) => group.code !== e.code)); // texts 배열 업데이트해서 해당 text.id와 일치하지 않는 데이터만 남도록 필터링
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    // try {
+    //   axios
+    //     .delete(`${BACKEND_URL}/group/${code}/`)
+    //     .then((res) => {
+    //       console.log(res);
+    //       setGroup(group.filter((e) => group.code !== e.code)); // texts 배열 업데이트해서 해당 text.id와 일치하지 않는 데이터만 남도록 필터링
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
 
-      navigate("/Home"); // 삭제버튼 누르면 홈으로
+    //   navigate("/Home"); // 삭제버튼 누르면 홈으로
+    // } catch (error) {
+    //   console.error("Error delete:", error);
+    // }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${BACKEND_URL}/group/${code}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 204) {
+        // 삭제된 그룹을 제외한 그룹 목록 업데이트
+        setGroup((prevGroup) =>
+          prevGroup.filter((group) => group.code !== code)
+        );
+        navigate("/Home"); // 삭제 후 홈으로
+      } else {
+        console.error(
+          "Failed to delete group. Response status:",
+          response.status
+        );
+      }
     } catch (error) {
-      console.error("Error delete:", error);
+      console.error("Error deleting group:", error);
     }
   };
 

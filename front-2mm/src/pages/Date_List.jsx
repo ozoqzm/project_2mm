@@ -13,7 +13,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -76,7 +75,7 @@ const DateText = styled.div`
 
 const TitleLink = styled.div`
   position: relative;
-  width: 200px;
+  width: 250px;
   height: 44px;
   left: 18px;
   top: 30px;
@@ -87,7 +86,7 @@ const TitleLink = styled.div`
   font-family: "SUIT";
   font-style: normal;
   font-weight: 700;
-  font-size: 35px;
+  font-size: 25px;
   line-height: 44px;
 `;
 
@@ -179,6 +178,7 @@ const PlanItem = ({ planID }) => {
             <ModalBasic
               key={planID}
               planID={planID}
+              setPost={setPost}
               setModalOpen={setModalOpen}
               closeModal={() => setModalOpen(false)}
             />

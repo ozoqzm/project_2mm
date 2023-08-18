@@ -11,7 +11,6 @@ const Container = styled.div`
   max-width: 375px;
   height: 740px;
   background: white;
-  border: 1px solid gray;
   margin: 30px auto;
 
   @media screen and (max-width: 768px) {
@@ -105,7 +104,7 @@ const Membership3 = () => {
         <img src={`${BACKEND_URL}/images/pwd_text.svg`} alt="subtitle" />
       </SubTitle>
       <InputPasswd
-        placeholder="영어,숫자 포함 8자리를 입력하세요."
+        placeholder="비밀번호를 입력해주세요"
         value={password}
         onChange={handlePasswdChange}
       />
